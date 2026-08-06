@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230F1115'/%3E%3Cpath d='M6 24C12 24 12 9 26 9' stroke='%2349D6A8' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Four Outcome Types — one spend decision, four honest answers</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -68,9 +69,17 @@
   .formula .num{color:var(--text);}
 
   footer{margin-top:24px; color:var(--text-faint); font-size:12px; font-family:var(--mono);}
+  .home-link{
+    display:inline-block; margin-bottom:20px; text-decoration:none;
+    font-family:var(--mono); font-size:11.5px; letter-spacing:.06em;
+    color:var(--text-faint); transition:color .15s;
+  }
+  .home-link:hover{color:var(--text-dim);}
 </style>
 </head>
 <body>
+<a class="home-link" href="index.html">&larr; all simulators</a>
+
 <div class="wrap">
   <div class="eyebrow">B2B insights layer — four outcome types</div>
   <h1>One spend decision, four honest answers</h1>
