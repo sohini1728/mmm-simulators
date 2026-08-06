@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Four Outcome Types — one spend decision, four honest answers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0F1115; --panel:#171A21; --panel-2:#1D212B; --border:#2A2E3A;
+    --text:#E9EAEE; --text-dim:#8B90A0; --text-faint:#5B5F6D;
+    --pass:#49D6A8; --fail:#E2687A; --warn:#F2A94E;
+    --mono:'JetBrains Mono', ui-monospace, monospace; --sans:'Inter', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:var(--sans); padding:32px 20px 80px; line-height:1.5;}
+  .wrap{max-width:1000px; margin:0 auto;}
+  .eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--text-faint); margin-bottom:8px;}
+  h1{font-size:26px; font-weight:700; margin:0 0 8px; letter-spacing:-0.01em;}
+  .sub{color:var(--text-dim); font-size:14px; max-width:680px; margin-bottom:24px;}
+
+  .intro{background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin-bottom:24px; font-size:13.5px; color:var(--text-dim);}
+  .intro b{color:var(--text); font-weight:600;}
+
+  .compare{width:100%; border-collapse:collapse; margin-top:16px; font-size:12.5px;}
+  .compare th{text-align:left; font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:.05em; color:var(--text-faint); padding:6px 10px; border-bottom:1px solid var(--border);}
+  .compare td{padding:9px 10px; border-bottom:1px solid var(--border); vertical-align:top;}
+  .compare tr:last-child td{border-bottom:none;}
+  .compare .oc-dot{display:inline-block; width:8px; height:8px; border-radius:2px; margin-right:7px;}
+
+  .budget-row{display:flex; align-items:center; gap:14px; margin-bottom:24px; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:18px 20px;}
+  .budget-row label{font-weight:600; font-size:13.5px; white-space:nowrap;}
+  .budget-row input[type=range]{flex:1;}
+  .budget-row .val{font-family:var(--mono); font-size:15px; min-width:80px; text-align:right;}
+
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  @media (max-width:720px){ .grid{grid-template-columns:1fr;} }
+
+  .oc-card{background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:18px 20px; border-top:3px solid var(--accent);}
+  .oc-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px;}
+  .oc-name{font-weight:700; font-size:15px;}
+  .oc-tag{font-family:var(--mono); font-size:10px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.06em;}
+  .oc-blurb{color:var(--text-dim); font-size:12.5px; margin:6px 0 14px;}
+
+  .signal-row{margin-bottom:12px;}
+  .signal-row label{display:flex; justify-content:space-between; font-family:var(--mono); font-size:11px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px;}
+  input[type=range]{width:100%; height:4px;}
+
+  .oc-result{
+    border-radius:8px; padding:14px 16px; margin-top:12px; font-family:var(--mono); min-height:64px;
+    display:flex; flex-direction:column; justify-content:center;
+  }
+  .oc-result.ok{background:rgba(73,214,168,.1); border:1px solid rgba(73,214,168,.3);}
+  .oc-result.refuse{background:rgba(226,104,122,.1); border:1px solid rgba(226,104,122,.3);}
+  .oc-result .big{font-size:20px; font-weight:600;}
+  .oc-result .small{font-size:11.5px; color:var(--text-dim); font-family:var(--sans); margin-top:4px;}
+  .oc-result.refuse .big{color:var(--fail); font-size:14px; font-weight:600;}
+
+  .formula{
+    font-family:var(--mono); font-size:11.5px; color:var(--text-dim);
+    background:var(--panel-2); border-radius:6px; padding:8px 10px; margin-top:10px;
+    overflow-x:auto; white-space:nowrap;
+  }
+  .formula .step{display:block; margin-bottom:4px;}
+  .formula .step:last-child{margin-bottom:0;}
+  .formula .num{color:var(--text);}
+
+  footer{margin-top:24px; color:var(--text-faint); font-size:12px; font-family:var(--mono);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">B2B insights layer — four outcome types</div>
+  <h1>One spend decision, four honest answers</h1>
+  <div class="sub">The model doesn't check just one metric. It checks four, at the same time, off the same frozen posterior — and any one of them can refuse to answer if the data behind it is too thin, instead of guessing.</div>
+
+  <div class="intro">
+    <b>Pipeline dollars</b> — the total value of deals currently open and being worked, not yet won or lost. Moves fast: a good ad can create new pipeline within days.<br><br>
+    <b>Closed-won dollars</b> — actual signed revenue. The number everyone really cares about, but it lags far behind pipeline — deals can take months to close.<br><br>
+    <b>Qualified leads</b> — a <i>count</i>, not a dollar figure. How many people or companies got identified as real potential buyers. Earlier in the funnel than pipeline, about volume of interest, not value yet.<br><br>
+    <b>Stage transitions</b> — also a <i>count</i>. How many deals moved forward a stage, like demo scheduled to proposal sent. Measures momentum, not volume or dollars.
+
+    <table class="compare">
+      <tr><th>Outcome</th><th>Unit</th><th>Typical lag</th><th>What "ROI" means here</th></tr>
+      <tr><td><span class="oc-dot" style="background:#7C9CFF"></span>Pipeline</td><td>Dollars</td><td>Days to weeks — reacts fastest</td><td>Real dollars of open value per dollar spent</td></tr>
+      <tr><td><span class="oc-dot" style="background:#F2A94E"></span>Closed-won</td><td>Dollars</td><td>Months — the slowest to move</td><td>Real dollars of signed revenue per dollar spent</td></tr>
+      <tr><td><span class="oc-dot" style="background:#49D6A8"></span>Qualified leads</td><td>Count</td><td>Days — earliest funnel signal</td><td>A rate: leads generated per dollar, not revenue</td></tr>
+      <tr><td><span class="oc-dot" style="background:#E2687A"></span>Stage transitions</td><td>Count</td><td>Weeks — tracks momentum, not entry</td><td>A rate: stage advances per dollar, not revenue</td></tr>
+    </table>
+  </div>
+
+  <div class="intro" style="border-left:3px solid var(--warn); margin-bottom:24px;">
+    <b>Every number below is made up.</b> Coefficient, half-saturation, slope, decay — all hand-picked so the four curves look sensibly different from each other, not derived from any real data or fit. In the real system, all four come out of NUTS sampling against actual history, differently for every posterior draw, not chosen in advance.
+  </div>
+
+  <div class="budget-row">
+    <label>Today's spend</label>
+    <input type="range" id="spend" min="0" max="5000" step="50" value="1800">
+    <div class="val" id="spend-val">$1,800</div>
+  </div>
+  <div class="budget-row">
+    <label>Decay rate</label>
+    <input type="range" id="decay" min="0" max="0.9" step="0.01" value="0.3">
+    <div class="val" id="decay-val">0.30</div>
+  </div>
+  <div class="budget-row">
+    <label>Yesterday's carryover</label>
+    <input type="range" id="carry" min="0" max="2000" step="10" value="400">
+    <div class="val" id="carry-val">400</div>
+  </div>
+  <div class="intro" style="margin-top:-10px;">Adstock happens once, upstream of all four outcome types — it describes how this channel's exposure lingers over time, not how any one outcome responds to it. So the same adstocked exposure number feeds all four cards below; only the saturation curve and coefficient after that point are separate per outcome.</div>
+
+  <div class="grid" id="cards"></div>
+
+  <footer>Drag any signal-strength slider low enough and that outcome type stops answering — exactly like Pipeline did on the poster. That refusal is a feature: an honest "I don't know" instead of a confident-sounding guess.</footer>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const fmt = n => n.toLocaleString('en-US',{maximumFractionDigits:0});
+
+const outcomeTypes = [
+  {
+    key:'pipeline', name:'Pipeline dollars', tag:'$ · continuous, fast-moving', accent:'#7C9CFF',
+    coef:8500, halfsat:900, slope:1.5, isDollar:true, defaultSignal:38,
+    blurb:'Open deal value in the funnel right now. Fast-moving, so ROI here reflects the most recent spend most directly.'
+  },
+  {
+    key:'closedwon', name:'Closed-won dollars', tag:'$ · continuous, slow-lagging', accent:'#F2A94E',
+    coef:3200, halfsat:1400, slope:1.7, isDollar:true, defaultSignal:70,
+    blurb:'Actual signed revenue. Ground truth, but recent spend often hasn\'t had time to show up here yet.'
+  },
+  {
+    key:'leads', name:'Qualified leads', tag:'# · count, early funnel', accent:'#49D6A8',
+    coef:46, halfsat:700, slope:1.2, isDollar:false, defaultSignal:82,
+    blurb:'How many real potential buyers this spend surfaced. A rate of leads per dollar, not a revenue figure.'
+  },
+  {
+    key:'stagetx', name:'Stage transitions', tag:'# · count, momentum', accent:'#E2687A',
+    coef:19, halfsat:850, slope:1.6, isDollar:false, defaultSignal:64,
+    blurb:'How many deals this spend helped move forward a stage. Measures whether things are advancing, not their size.'
+  },
+];
+
+function adstock(spend, decay, carry){ return spend + decay*carry; }
+function outcomeAt(o, exposure){
+  if(exposure<=0) return 0;
+  const num = Math.pow(exposure, o.slope);
+  return o.coef * num/(num+Math.pow(o.halfsat,o.slope));
+}
+
+function buildCards(){
+  $('cards').innerHTML = outcomeTypes.map(o=>`
+    <div class="oc-card" style="--accent:${o.accent}">
+      <div class="oc-head"><span class="oc-name">${o.name}</span><span class="oc-tag">${o.tag}</span></div>
+      <div class="oc-blurb">${o.blurb}</div>
+      <div class="signal-row">
+        <label><span>Signal strength (data quality)</span><span id="sig-${o.key}-val"></span></label>
+        <input type="range" id="sig-${o.key}" min="0" max="100" step="1" value="${o.defaultSignal}">
+      </div>
+      <div class="oc-result" id="res-${o.key}"></div>
+      <div class="formula" id="math-${o.key}"></div>
+    </div>
+  `).join('');
+  outcomeTypes.forEach(o=>{
+    $(`sig-${o.key}`).addEventListener('input', update);
+  });
+}
+
+function update(){
+  const spend = parseFloat($('spend').value);
+  const decay = parseFloat($('decay').value);
+  const carry = parseFloat($('carry').value);
+  $('spend-val').textContent = '$'+fmt(spend);
+  $('decay-val').textContent = decay.toFixed(2);
+  $('carry-val').textContent = fmt(carry);
+
+  const exposure = adstock(spend, decay, carry);
+
+  outcomeTypes.forEach(o=>{
+    const signal = parseFloat($(`sig-${o.key}`).value);
+    $(`sig-${o.key}-val`).textContent = signal + '%';
+    const ess = signal*8; // illustrative proxy for effective sample size
+    const box = $(`res-${o.key}`);
+    const math = $(`math-${o.key}`);
+    const satNum = Math.pow(exposure, o.slope);
+    const satDen = satNum + Math.pow(o.halfsat, o.slope);
+    const satVal = exposure>0 ? satNum/satDen : 0;
+    const out = outcomeAt(o, exposure);
+
+    if(ess < 400){
+      box.className = 'oc-result refuse';
+      box.innerHTML = `<div class="big">Refuses to allocate</div><div class="small">Effective sample size ≈ ${fmt(ess)}, below the 400 gate. Not enough signal to trust an answer here — the system says so instead of guessing.</div>`;
+      math.innerHTML = `<span class="step">signal strength <span class="num">${signal}%</span> × 8 ≈ ESS <span class="num">${fmt(ess)}</span></span>`
+        + `<span class="step"><span class="num">${fmt(ess)}</span> &lt; 400 gate → refuse, adstock/saturation/coefficient never even get computed</span>`;
+    } else {
+      const roi = spend>0 ? out/spend : 0;
+      box.className = 'oc-result ok';
+      if(o.isDollar){
+        box.innerHTML = `<div class="big">$${fmt(out)} predicted</div><div class="small">${roi.toFixed(2)}x — every dollar spent returns about $${roi.toFixed(2)} here.</div>`;
+      } else {
+        box.innerHTML = `<div class="big">${out.toFixed(1)} predicted</div><div class="small">${roi.toFixed(3)} per dollar — a rate, not a revenue figure.</div>`;
+      }
+      math.innerHTML = `<span class="step">signal <span class="num">${signal}%</span> × 8 ≈ ESS <span class="num">${fmt(ess)}</span> ≥ 400 → passes, compute proceeds</span>`
+        + `<span class="step">adstock (shared) = ${fmt(spend)} + ${decay.toFixed(2)} × ${fmt(carry)} = <span class="num">${fmt(exposure)}</span></span>`
+        + `<span class="step">sat = ${fmt(exposure)}<sup>${o.slope}</sup> ÷ (${fmt(exposure)}<sup>${o.slope}</sup> + ${fmt(o.halfsat)}<sup>${o.slope}</sup>) = <span class="num">${(satVal*100).toFixed(1)}%</span></span>`
+        + `<span class="step">${(satVal*100).toFixed(1)}% × coef <span class="num">${o.coef}</span> = <span class="num">${out.toFixed(1)}</span></span>`
+        + `<span class="step">${out.toFixed(1)} ÷ spend <span class="num">${fmt(spend)}</span> = <span class="num">${roi.toFixed(3)}</span> per dollar</span>`;
+    }
+  });
+}
+
+buildCards();
+['spend','decay','carry'].forEach(id=>$(id).addEventListener('input', update));
+update();
+</script>
+</body>
+</html>

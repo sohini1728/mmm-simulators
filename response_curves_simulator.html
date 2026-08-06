@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Response Curves — one channel's whole story, not just one number</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0F1115; --panel:#171A21; --panel-2:#1D212B; --border:#2A2E3A;
+    --text:#E9EAEE; --text-dim:#8B90A0; --text-faint:#5B5F6D;
+    --pass:#49D6A8; --warn:#F2A94E; --mono:'JetBrains Mono', ui-monospace, monospace; --sans:'Inter', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:var(--sans); padding:32px 20px 80px; line-height:1.5;}
+  .wrap{max-width:1000px; margin:0 auto;}
+  .eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--text-faint); margin-bottom:8px;}
+  h1{font-size:26px; font-weight:700; margin:0 0 8px; letter-spacing:-0.01em;}
+  .sub{color:var(--text-dim); font-size:14px; max-width:680px; margin-bottom:24px;}
+
+  .formula-banner{
+    font-family:var(--mono); font-size:14px; background:var(--panel); border:1px solid var(--border);
+    border-radius:10px; padding:14px 18px; margin-bottom:22px; overflow-x:auto; white-space:nowrap;
+  }
+  .formula-banner .num{color:var(--text-dim);}
+  .formula-banner .lbl{display:block; font-family:var(--sans); font-size:11px; color:var(--text-faint); margin-bottom:6px;}
+
+  .tabs{display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap;}
+  .tab{
+    font-family:var(--mono); font-size:12px; padding:8px 16px; border-radius:20px; border:1px solid var(--border);
+    background:var(--panel); color:var(--text-dim); cursor:pointer; transition:all .15s;
+  }
+  .tab.active{color:#0F1115; font-weight:600; border-color:transparent;}
+  .tab .dot{display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px;}
+
+  .layout{display:grid; grid-template-columns:260px 1fr; gap:20px;}
+  @media (max-width:760px){ .layout{grid-template-columns:1fr;} }
+  .card{background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:18px 20px;}
+  .card-head{font-weight:600; font-size:13.5px; margin-bottom:14px;}
+
+  .ctl{margin-bottom:16px;}
+  .ctl label{display:flex; justify-content:space-between; font-family:var(--mono); font-size:10.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.05em; margin-bottom:5px;}
+  .ctl label .v{color:var(--text); text-transform:none;}
+  input[type=range]{width:100%; height:4px;}
+  .toggle-row{display:flex; align-items:center; justify-content:space-between; margin-top:6px;}
+  .toggle-row span{font-size:12.5px; color:var(--text-dim);}
+  .toggle-track{position:relative; width:36px; height:20px; background:var(--border); border-radius:10px; cursor:pointer;}
+  .toggle-track.on{background:var(--pass);}
+  .toggle-knob{position:absolute; top:2px; left:2px; width:16px; height:16px; background:#0F1115; border-radius:50%; transition:transform .18s;}
+  .toggle-track.on .toggle-knob{transform:translateX(16px);}
+
+  .chart-card{padding:20px;}
+  .legend-row{display:flex; gap:16px; flex-wrap:wrap; margin-bottom:10px; font-family:var(--mono); font-size:11px; color:var(--text-dim);}
+  .legend-row .li{display:flex; align-items:center; gap:6px;}
+  .legend-row .sw{width:10px; height:3px; border-radius:2px; display:inline-block;}
+  .legend-row .sw.dash{background:repeating-linear-gradient(90deg,var(--warn) 0 4px,transparent 4px 7px);}
+
+  .readout{display:flex; gap:24px; flex-wrap:wrap; margin-top:16px; padding-top:14px; border-top:1px solid var(--border);}
+  .metric .label{font-family:var(--sans); font-size:11px; color:var(--text-faint); display:block; margin-bottom:4px;}
+  .metric .v{font-family:var(--mono); font-size:19px; font-weight:600;}
+  .metric .v.warn{color:var(--warn);}
+
+  footer{margin-top:20px; color:var(--text-faint); font-size:12px; font-family:var(--mono);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">B2B insights layer — response curves view</div>
+  <h1>One channel's whole story, not just one number</h1>
+  <div class="sub">ROI is one point. This is the whole curve behind it — reshape it, drag along it, and see exactly where your real data stops and the model starts extrapolating on assumption alone.</div>
+
+  <div class="formula-banner">
+    <span class="lbl">Hill saturation formula — this is what every curve below is plotting</span>
+    outcome = <span class="num">coefficient</span> × spend<sup>slope</sup> ÷ ( spend<sup>slope</sup> + half-saturation<sup>slope</sup> )
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="layout">
+    <div class="card">
+      <div class="card-head">Curve shape</div>
+      <div class="ctl">
+        <label>Coefficient (ceiling) <span class="v" id="v-coef"></span></label>
+        <input type="range" id="coef" min="1000" max="16000" step="50">
+      </div>
+      <div class="ctl">
+        <label>Half-saturation <span class="v" id="v-halfsat"></span></label>
+        <input type="range" id="halfsat" min="100" max="3500" step="10">
+      </div>
+      <div class="ctl">
+        <label>Slope <span class="v" id="v-slope"></span></label>
+        <input type="range" id="slope" min="0.5" max="4" step="0.05">
+      </div>
+      <div class="ctl">
+        <label>Observed spend, max seen in data <span class="v" id="v-observed"></span></label>
+        <input type="range" id="observed" min="500" max="5000" step="50">
+      </div>
+      <div class="toggle-row"><span>Compare all channels</span><div class="toggle-track" id="tg-compare"><div class="toggle-knob"></div></div></div>
+    </div>
+
+    <div class="card chart-card">
+      <div class="legend-row">
+        <span class="li"><span class="sw" style="background:var(--accent,#49D6A8)"></span>this channel's curve</span>
+        <span class="li"><span class="sw dash"></span>extrapolated — no data past here</span>
+        <span class="li"><span class="sw" style="background:#7C9CFF"></span>tangent = marginal ROI</span>
+      </div>
+      <svg id="curve" width="100%" viewBox="0 0 900 320" preserveAspectRatio="xMidYMid meet"></svg>
+      <div class="ctl" style="margin-top:8px;">
+        <label>Spend, drag along the curve <span class="v" id="v-spend"></span></label>
+        <input type="range" id="spend" min="0" max="5000" step="10">
+      </div>
+      <div class="readout">
+        <div class="metric"><span class="label">predicted outcome</span><span class="v" id="r-out"></span></div>
+        <div class="metric"><span class="label">plain ROI at this spend</span><span class="v" id="r-roi"></span></div>
+        <div class="metric"><span class="label">marginal ROI, next $</span><span class="v" id="r-mroi"></span></div>
+        <div class="metric"><span class="label">status</span><span class="v" id="r-status"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <footer>All coefficient, half-saturation, and slope values are illustrative — in the real system they come from the frozen posterior, one value per draw, not from these sliders.</footer>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const fmt = n => n.toLocaleString('en-US',{maximumFractionDigits:0});
+
+const channels = [
+  {name:'Search',       hex:'#7C9CFF', coef:14000, halfsat:1800, slope:1.3, observed:3200},
+  {name:'Display',      hex:'#49D6A8', coef:9000,  halfsat:1200, slope:1.6, observed:2400},
+  {name:'Social',       hex:'#F2A94E', coef:7000,  halfsat:900,  slope:1.8, observed:2000},
+  {name:'LinkedIn Ads', hex:'#E2687A', coef:11000, halfsat:2200, slope:1.2, observed:3800},
+];
+let active = 0;
+let compareOn = false;
+
+function outcomeAt(ch, spend){
+  if(spend<=0) return 0;
+  const num = Math.pow(spend, ch.slope);
+  return ch.coef * num/(num+Math.pow(ch.halfsat,ch.slope));
+}
+
+function buildTabs(){
+  $('tabs').innerHTML = channels.map((ch,i)=>`
+    <div class="tab ${i===active?'active':''}" id="tab-${i}" style="${i===active?`background:${ch.hex}`:''}">
+      <span class="dot" style="background:${ch.hex}"></span>${ch.name}
+    </div>`).join('');
+  channels.forEach((_,i)=>$(`tab-${i}`).addEventListener('click', ()=>{ active=i; syncControls(); buildTabs(); render(); }));
+}
+
+function syncControls(){
+  const ch = channels[active];
+  $('coef').value = ch.coef; $('halfsat').value = ch.halfsat; $('slope').value = ch.slope;
+  $('observed').value = ch.observed;
+  document.documentElement.style.setProperty('--accent', ch.hex);
+}
+
+function drawCurve(){
+  const ch = channels[active];
+  ch.coef = parseFloat($('coef').value); ch.halfsat = parseFloat($('halfsat').value); ch.slope = parseFloat($('slope').value);
+  ch.observed = parseFloat($('observed').value);
+  const spend = parseFloat($('spend').value);
+
+  $('v-coef').textContent = fmt(ch.coef);
+  $('v-halfsat').textContent = fmt(ch.halfsat);
+  $('v-slope').textContent = ch.slope.toFixed(2);
+  $('v-observed').textContent = '$'+fmt(ch.observed);
+  $('v-spend').textContent = '$'+fmt(spend);
+
+  const maxSpend = 5000;
+  const svg = $('curve');
+  const W=900,H=320,pad={l:60,r:20,t:16,b:34};
+  const plotW=W-pad.l-pad.r, plotH=H-pad.t-pad.b;
+
+  let maxOut = 1;
+  const allCurves = compareOn ? channels : [ch];
+  allCurves.forEach(c=>{ for(let s=0;s<=maxSpend;s+=maxSpend/60){ const o=outcomeAt(c,s); if(o>maxOut) maxOut=o; } });
+  maxOut*=1.08;
+
+  const X = s => pad.l+(s/maxSpend)*plotW;
+  const Y = o => pad.t+plotH-(o/maxOut)*plotH;
+
+  function pathFor(c){
+    const pts=[]; for(let s=0;s<=maxSpend;s+=maxSpend/140){ pts.push([s,outcomeAt(c,s)]); }
+    return pts.map((p,i)=>(i===0?'M':'L')+X(p[0]).toFixed(1)+' '+Y(p[1]).toFixed(1)).join(' ');
+  }
+
+  let gridLines='', xLabels='';
+  for(let i=0;i<=4;i++){
+    const gy=pad.t+plotH-(i/4)*plotH, val=Math.round((i/4)*maxOut);
+    gridLines+=`<line x1="${pad.l}" y1="${gy}" x2="${W-pad.r}" y2="${gy}" stroke="#2A2E3A" stroke-width="1"/>`;
+    gridLines+=`<text x="${pad.l-8}" y="${gy+4}" fill="#5B5F6D" font-size="10" text-anchor="end">${fmt(val)}</text>`;
+  }
+  for(let i=0;i<=5;i++){ const s=(i/5)*maxSpend; xLabels+=`<text x="${X(s)}" y="${H-10}" fill="#5B5F6D" font-size="10" text-anchor="middle">$${fmt(s)}</text>`; }
+
+  let compareLines = '';
+  if(compareOn){
+    channels.forEach((c,i)=>{ if(i!==active) compareLines += `<path d="${pathFor(c)}" fill="none" stroke="${c.hex}" stroke-width="1.5" opacity="0.35"/>`; });
+  }
+
+  const obsX = X(ch.observed);
+  const shadeObserved = `<rect x="${pad.l}" y="${pad.t}" width="${(obsX-pad.l).toFixed(1)}" height="${plotH}" fill="${ch.hex}" opacity="0.05"/>`;
+  const dashedTail = `<line x1="${obsX}" y1="${pad.t}" x2="${obsX}" y2="${pad.t+plotH}" stroke="${ch.hex}" stroke-width="1" stroke-dasharray="4 4" opacity="0.5"/>`;
+
+  const out = outcomeAt(ch, spend);
+  const cx = X(spend), cy = Y(out);
+  const h=1, up=outcomeAt(ch, Math.min(spend+h,maxSpend)), lo=outcomeAt(ch, Math.max(spend-h,0));
+  const mroi = (up-lo)/(spend>=h?2*h:h);
+  const dxData=700, dxS=dxData/maxSpend*plotW, dyS=(mroi*dxData)/maxOut*plotH;
+  const tx1=cx-dxS, ty1=cy+dyS, tx2=cx+dxS, ty2=cy-dyS;
+
+  const extrapolated = spend > ch.observed;
+
+  svg.innerHTML = `
+    ${gridLines}
+    ${shadeObserved}
+    ${compareLines}
+    <path d="${pathFor(ch)}" fill="none" stroke="${ch.hex}" stroke-width="2.5"/>
+    ${dashedTail}
+    <line x1="${tx1.toFixed(1)}" y1="${ty1.toFixed(1)}" x2="${tx2.toFixed(1)}" y2="${ty2.toFixed(1)}" stroke="#7C9CFF" stroke-width="1.75"/>
+    <line x1="${cx}" y1="${pad.t}" x2="${cx}" y2="${pad.t+plotH}" stroke="${ch.hex}" stroke-width="1" stroke-dasharray="2 5" opacity="0.6"/>
+    <circle cx="${cx}" cy="${cy}" r="5.5" fill="${extrapolated?'#F2A94E':ch.hex}" stroke="#0F1115" stroke-width="2"/>
+    <text x="${pad.l+10}" y="${pad.t+16}" fill="#5B5F6D" font-size="10">observed range</text>
+    ${xLabels}
+  `;
+
+  $('r-out').textContent = fmt(out);
+  $('r-roi').textContent = spend>0 ? (out/spend).toFixed(2)+'x' : '—';
+  $('r-mroi').textContent = mroi.toFixed(2)+'x';
+  const status = $('r-status');
+  status.textContent = extrapolated ? 'extrapolated' : 'within data';
+  status.className = 'v' + (extrapolated ? ' warn' : '');
+}
+
+function render(){ drawCurve(); }
+
+$('tg-compare').addEventListener('click', ()=>{ compareOn=!compareOn; $('tg-compare').classList.toggle('on',compareOn); render(); });
+['coef','halfsat','slope','observed','spend'].forEach(id=>$(id).addEventListener('input', render));
+
+buildTabs();
+syncControls();
+$('spend').value = 1800;
+render();
+</script>
+</body>
+</html>

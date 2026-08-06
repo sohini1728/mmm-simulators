@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MMM Simulators — how a marketing mix model actually decides</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0F1115; --panel:#171A21; --panel-2:#1D212B; --border:#2A2E3A;
+    --text:#E6E9EF; --text-dim:#A7AEBD; --text-faint:#5B5F6D;
+    --green:#49D6A8; --blue:#7C9CFF; --amber:#F2A94E; --violet:#B98CFF; --rose:#E2687A;
+    --sans:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:var(--sans);
+       padding:56px 20px 90px; line-height:1.55;}
+  .wrap{max-width:900px; margin:0 auto;}
+  .eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:.12em;
+           text-transform:uppercase; color:var(--text-faint); margin-bottom:10px;}
+  h1{font-size:32px; line-height:1.2; margin:0 0 14px; font-weight:700; letter-spacing:-.02em;}
+  .lede{font-size:16px; color:var(--text-dim); max-width:660px; margin:0 0 8px;}
+  .lede strong{color:var(--text); font-weight:600;}
+
+  .grid{display:grid; gap:14px; margin:36px 0 0;}
+  a.sim{
+    display:grid; grid-template-columns:44px 1fr; gap:18px; align-items:start;
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:20px 22px; text-decoration:none; color:inherit;
+    transition:border-color .15s, background .15s, transform .15s;
+  }
+  a.sim:hover{background:var(--panel-2); border-color:var(--text-faint); transform:translateY(-1px);}
+  .n{font-family:var(--mono); font-size:19px; font-weight:600; line-height:1.35;}
+  .sim h2{font-size:17px; margin:0 0 5px; font-weight:600; letter-spacing:-.01em;}
+  .sim p{margin:0; font-size:14px; color:var(--text-dim);}
+  .sim .q{
+    display:block; margin-top:9px; font-family:var(--mono); font-size:11.5px;
+    color:var(--text-faint);
+  }
+  .foot{
+    margin-top:40px; padding-top:20px; border-top:1px solid var(--border);
+    font-family:var(--mono); font-size:11.5px; color:var(--text-faint); line-height:1.7;
+  }
+  @media (max-width:560px){
+    h1{font-size:25px;}
+    a.sim{grid-template-columns:1fr; gap:8px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Marketing mix modeling · interactive</div>
+  <h1>How a marketing mix model actually decides</h1>
+  <p class="lede">
+    Five things you can pull on. Each one isolates a single decision the model makes, so you can
+    push it until it breaks and see why the answer changes. <strong>Everything runs in your
+    browser</strong> — no data leaves the page, and every number is illustrative.
+  </p>
+
+  <div class="grid">
+    <a class="sim" href="mmm_pipeline_simulator.html">
+      <span class="n" style="color:var(--green)">01</span>
+      <span>
+        <h2>Trace one dollar</h2>
+        <p>Follow a single dollar through adstock, saturation, and the channel coefficient — next
+        to the same pipeline with that channel zeroed out. The gap between them <em>is</em> the
+        attributed outcome.</p>
+        <span class="q">→ why ROI is a difference, not a share</span>
+      </span>
+    </a>
+
+    <a class="sim" href="response_curves_simulator.html">
+      <span class="n" style="color:var(--blue)">02</span>
+      <span>
+        <h2>Read a response curve</h2>
+        <p>Reshape one channel's saturation curve and drag along it. The curve goes dashed past the
+        spend you've actually observed — beyond that line the model is extrapolating on functional
+        form alone.</p>
+        <span class="q">→ where your data ends and guessing starts</span>
+      </span>
+    </a>
+
+    <a class="sim" href="outcome_types_simulator.html">
+      <span class="n" style="color:var(--violet)">03</span>
+      <span>
+        <h2>Pick what to grow</h2>
+        <p>One spend decision, four outcomes — pipeline dollars, closed-won, qualified leads, stage
+        transitions. Different units, different answers. Starve one and watch it refuse to answer
+        at all.</p>
+        <span class="q">→ why a count ROI can't be compared to a dollar ROI</span>
+      </span>
+    </a>
+
+    <a class="sim" href="budget_mix_simulator.html">
+      <span class="n" style="color:var(--amber)">04</span>
+      <span>
+        <h2>Split the budget</h2>
+        <p>Drag channel shares against a fixed total, then optimise. The marginal returns converge
+        to equal across channels — which is the whole reason you don't just pour everything into
+        the highest-ROI one.</p>
+        <span class="q">→ where the next dollar should go</span>
+      </span>
+    </a>
+
+    <a class="sim" href="reconciliation_stability_simulator.html">
+      <span class="n" style="color:var(--rose)">05</span>
+      <span>
+        <h2>Decide if it ships</h2>
+        <p>Drive the release gates yourself — sampler convergence, agreement with a real lift test,
+        and whether the ranking survives perturbed data. Any one of them can block the result.</p>
+        <span class="q">→ a model that can say "I don't know"</span>
+      </span>
+    </a>
+  </div>
+
+  <p class="foot">
+    Illustrative parameters throughout · no real campaign data · runs entirely client-side<br>
+    Best read in order — each page assumes the one before it.
+  </p>
+</div>
+</body>
+</html>

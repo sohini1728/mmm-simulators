@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reconciliation &amp; Stability Simulator — should this fit ship</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0F1115; --panel:#171A21; --panel-2:#1D212B; --border:#2A2E3A;
+    --text:#E9EAEE; --text-dim:#8B90A0; --text-faint:#5B5F6D;
+    --pass:#49D6A8; --fail:#E2687A; --warn:#F2A94E;
+    --mono:'JetBrains Mono', ui-monospace, monospace; --sans:'Inter', system-ui, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:var(--sans); padding:32px 20px 80px; line-height:1.5;}
+  .wrap{max-width:1000px; margin:0 auto;}
+  .eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--text-faint); margin-bottom:8px;}
+  h1{font-size:26px; font-weight:700; margin:0 0 8px; letter-spacing:-0.01em;}
+  .sub{color:var(--text-dim); font-size:14px; max-width:680px; margin-bottom:28px;}
+
+  .card{background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:20px;}
+  .card-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;}
+  .card-head h2{font-size:15px; margin:0;}
+  .card-sub{color:var(--text-dim); font-size:12.5px; margin-bottom:16px;}
+  .badge{font-family:var(--mono); font-size:11px; font-weight:600; padding:4px 10px; border-radius:20px; text-transform:uppercase; letter-spacing:.04em;}
+  .badge.pass{background:rgba(73,214,168,.14); color:var(--pass); border:1px solid rgba(73,214,168,.35);}
+  .badge.fail{background:rgba(226,104,122,.14); color:var(--fail); border:1px solid rgba(226,104,122,.35);}
+  .badge.warn{background:rgba(242,169,78,.14); color:var(--warn); border:1px solid rgba(242,169,78,.35);}
+
+  .gate-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:16px;}
+  .gate{background:var(--panel-2); border:1px solid var(--border); border-radius:10px; padding:14px 16px;}
+  .gate-top{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px;}
+  .gate-name{font-weight:600; font-size:13px;}
+  .gate-val{font-family:var(--mono); font-size:13px;}
+  .gate-thresh{font-family:var(--mono); font-size:10.5px; color:var(--text-faint); margin-top:6px;}
+  input[type=range]{width:100%; height:4px; margin:4px 0;}
+
+  .recon-row{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:14px;}
+  @media (max-width:640px){ .recon-row{grid-template-columns:1fr;} }
+  .recon-metric{font-family:var(--mono); font-size:11px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.05em; margin-bottom:6px;}
+  .recon-diff{display:flex; justify-content:space-between; align-items:center; margin-top:10px; font-family:var(--mono); font-size:13px;}
+
+  .toggle-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin-bottom:14px;}
+  .toggle-item{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    background:var(--panel-2); border:1px solid var(--border); border-radius:8px; padding:10px 12px;
+  }
+  .toggle-item span{font-size:12.5px;}
+  .toggle-track{position:relative; width:36px; height:20px; background:var(--border); border-radius:10px; flex-shrink:0; cursor:pointer;}
+  .toggle-track.on{background:var(--pass);}
+  .toggle-knob{position:absolute; top:2px; left:2px; width:16px; height:16px; background:#0F1115; border-radius:50%; transition:transform .18s;}
+  .toggle-track.on .toggle-knob{transform:translateX(16px); background:#04342C;}
+
+  .stability-summary{display:flex; justify-content:space-between; align-items:center; font-family:var(--mono); font-size:13px; padding-top:6px; border-top:1px solid var(--border);}
+
+  .tier-card{padding:24px; text-align:center;}
+  .tier-label{font-family:var(--mono); font-size:11px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px;}
+  .tier-name{font-size:24px; font-weight:700; margin-bottom:8px;}
+  .tier-desc{color:var(--text-dim); font-size:13px; max-width:520px; margin:0 auto;}
+
+  .note{color:var(--text-faint); font-size:11.5px; max-width:680px;}
+  footer{margin-top:8px; color:var(--text-faint); font-size:12px; font-family:var(--mono);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">B2B insights layer — should this fit ship</div>
+  <h1>Reconciliation &amp; stability, made interactive</h1>
+  <div class="sub">Three separate questions, three separate checks. Move the sliders and toggles below and watch each gate, and the final certification, respond exactly the way the real pipeline would.</div>
+
+  <div class="card">
+    <div class="card-head"><h2>1 · Convergence gates</h2><span class="badge" id="gate-badge">—</span></div>
+    <div class="card-sub">Did the sampler itself produce a trustworthy posterior? Checked once, before anything else runs.</div>
+    <div class="gate-grid">
+      <div class="gate">
+        <div class="gate-top"><span class="gate-name">r-hat</span><span class="gate-val" id="rhat-val"></span></div>
+        <input type="range" id="rhat" min="1.000" max="1.150" step="0.001" value="1.008">
+        <div class="gate-thresh">pass if ≤ 1.01</div>
+      </div>
+      <div class="gate">
+        <div class="gate-top"><span class="gate-name">ESS bulk</span><span class="gate-val" id="essb-val"></span></div>
+        <input type="range" id="essb" min="0" max="2000" step="10" value="650">
+        <div class="gate-thresh">pass if ≥ 400</div>
+      </div>
+      <div class="gate">
+        <div class="gate-top"><span class="gate-name">ESS tail</span><span class="gate-val" id="esst-val"></span></div>
+        <input type="range" id="esst" min="0" max="2000" step="10" value="580">
+        <div class="gate-thresh">pass if ≥ 400</div>
+      </div>
+      <div class="gate">
+        <div class="gate-top"><span class="gate-name">divergences</span><span class="gate-val" id="div-val"></span></div>
+        <input type="range" id="div" min="0" max="50" step="1" value="0">
+        <div class="gate-thresh">pass if = 0</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><h2>2 · Reconciliation</h2><span class="badge" id="recon-badge">—</span></div>
+    <div class="card-sub">Do two views reading the same frozen posterior land on the same number? Not new data — just an internal cross-check.</div>
+    <div class="recon-row">
+      <div>
+        <div class="recon-metric">ROI view result</div>
+        <input type="range" id="roiA" min="2" max="7" step="0.01" value="4.43">
+        <div class="gate-val" id="roiA-val" style="font-family:var(--mono); font-size:16px;"></div>
+      </div>
+      <div>
+        <div class="recon-metric">Response curve view, at same real spend</div>
+        <input type="range" id="roiB" min="2" max="7" step="0.01" value="4.43">
+        <div class="gate-val" id="roiB-val" style="font-family:var(--mono); font-size:16px;"></div>
+      </div>
+    </div>
+    <div>
+      <div class="recon-metric">Tolerance</div>
+      <input type="range" id="tol" min="0.5" max="10" step="0.5" value="2">
+    </div>
+    <div class="recon-diff"><span>difference: <span id="recon-diff-val"></span></span><span>tolerance: <span id="tol-val"></span></span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><h2>3 · Stability check</h2><span class="badge" id="stab-badge">—</span></div>
+    <div class="card-sub">Perturb the real data ten different ways and rerun everything. Toggle each one to say whether the original recommendation still held.</div>
+    <div class="toggle-grid" id="toggles"></div>
+    <div class="stability-summary"><span id="stab-count"></span><span>gate: 8 / 10 must hold</span></div>
+  </div>
+
+  <div class="card tier-card">
+    <div class="tier-label">Final certification</div>
+    <div class="tier-name" id="tier-name">—</div>
+    <div class="tier-desc" id="tier-desc"></div>
+  </div>
+
+  <div class="note">Tier names here are illustrative for this demo, not a quote of any internal naming scheme — the real logic that matters is: fail convergence and nothing downstream is trusted; pass convergence but fail reconciliation and the fit is flagged as internally inconsistent; pass both and stability decides how confidently you can act on the recommendation.</div>
+  <footer>Every slider and toggle above maps to a real check in the pipeline — nothing here is decorative.</footer>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+const perturbations = [
+  'Resample days', 'Jitter spend ±5%', 'Drop random week', 'Shuffle within week',
+  'Bootstrap accounts', 'Add outcome noise', 'Exclude top-decile day',
+  'Exclude bottom-decile day', 'Early-half only', 'Late-half only'
+];
+let toggleState = perturbations.map((_,i)=> i!==2);
+
+function buildToggles(){
+  $('toggles').innerHTML = perturbations.map((name,i)=>`
+    <div class="toggle-item">
+      <span>${name}</span>
+      <div class="toggle-track ${toggleState[i]?'on':''}" id="tg-${i}"><div class="toggle-knob"></div></div>
+    </div>
+  `).join('');
+  perturbations.forEach((_,i)=>{
+    $(`tg-${i}`).addEventListener('click', ()=>{
+      toggleState[i] = !toggleState[i];
+      $(`tg-${i}`).classList.toggle('on', toggleState[i]);
+      update();
+    });
+  });
+}
+
+function setBadge(el, ok, warnMode){
+  el.textContent = ok ? 'pass' : (warnMode ? 'flagged' : 'fail');
+  el.className = 'badge ' + (ok ? 'pass' : (warnMode?'warn':'fail'));
+}
+
+function update(){
+  const rhat = parseFloat($('rhat').value);
+  const essb = parseFloat($('essb').value);
+  const esst = parseFloat($('esst').value);
+  const div  = parseFloat($('div').value);
+  $('rhat-val').textContent = rhat.toFixed(3);
+  $('essb-val').textContent = essb;
+  $('esst-val').textContent = esst;
+  $('div-val').textContent = div;
+
+  const gateOk = rhat<=1.01 && essb>=400 && esst>=400 && div===0;
+  setBadge($('gate-badge'), gateOk, false);
+
+  const roiA = parseFloat($('roiA').value);
+  const roiB = parseFloat($('roiB').value);
+  const tol = parseFloat($('tol').value);
+  $('roiA-val').textContent = roiA.toFixed(2)+'x';
+  $('roiB-val').textContent = roiB.toFixed(2)+'x';
+  $('tol-val').textContent = tol.toFixed(1)+'%';
+  const diffPct = Math.abs(roiA-roiB)/((roiA+roiB)/2)*100;
+  $('recon-diff-val').textContent = diffPct.toFixed(2)+'%';
+  const reconOk = diffPct <= tol;
+  setBadge($('recon-badge'), reconOk, false);
+
+  const passed = toggleState.filter(Boolean).length;
+  $('stab-count').textContent = passed + ' / 10 held';
+  const stabOk = passed>=8;
+  setBadge($('stab-badge'), stabOk, false);
+
+  let tierName, tierDesc, tierColor;
+  if(!gateOk){
+    tierName='Not certified — fit refused'; tierColor='var(--fail)';
+    tierDesc='The posterior itself failed a convergence gate. Nothing downstream is trustworthy until this is refit.';
+  } else if(!reconOk){
+    tierName='Flagged — views disagree'; tierColor='var(--warn)';
+    tierDesc='The sampler converged, but two views reading the same posterior gave inconsistent numbers. That points to a bug in the pipeline, not the data.';
+  } else if(stabOk){
+    tierName='Certified — stable'; tierColor='var(--pass)';
+    tierDesc='Converged cleanly, views agree, and the recommendation survives at least 8 of 10 data perturbations. Safe to act on.';
+  } else {
+    tierName='Usable, flagged as unstable'; tierColor='var(--warn)';
+    tierDesc='Converged and internally consistent, but the recommendation flips under some reasonable perturbations of the data. Worth a second look before committing real budget.';
+  }
+  $('tier-name').textContent = tierName;
+  $('tier-name').style.color = tierColor;
+  $('tier-desc').textContent = tierDesc;
+}
+
+['rhat','essb','esst','div','roiA','roiB','tol'].forEach(id=>{
+  $(id).addEventListener('input', update);
+});
+
+buildToggles();
+update();
+</script>
+</body>
+</html>
