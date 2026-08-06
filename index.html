@@ -2,124 +2,1405 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230F1115'/%3E%3Cpath d='M6 24C12 24 12 9 26 9' stroke='%2349D6A8' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MMM Simulators — how a marketing mix model actually decides</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230a66c2'/><path d='M7 22 L13 14 L18 18 L25 9' stroke='%23ffffff' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+<title>Insights Layer — B2B Marketing Mix Modeling</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg:#0F1115; --panel:#171A21; --panel-2:#1D212B; --border:#2A2E3A;
-    --text:#E6E9EF; --text-dim:#A7AEBD; --text-faint:#5B5F6D;
-    --green:#49D6A8; --blue:#7C9CFF; --amber:#F2A94E; --violet:#B98CFF; --rose:#E2687A;
-    --sans:'Inter',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace;
-  }
-  *{box-sizing:border-box;}
-  body{margin:0; background:var(--bg); color:var(--text); font-family:var(--sans);
-       padding:56px 20px 90px; line-height:1.55;}
-  .wrap{max-width:900px; margin:0 auto;}
-  .eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:.12em;
-           text-transform:uppercase; color:var(--text-faint); margin-bottom:10px;}
-  h1{font-size:32px; line-height:1.2; margin:0 0 14px; font-weight:700; letter-spacing:-.02em;}
-  .lede{font-size:16px; color:var(--text-dim); max-width:660px; margin:0 0 8px;}
-  .lede strong{color:var(--text); font-weight:600;}
-
-  .grid{display:grid; gap:14px; margin:36px 0 0;}
-  a.sim{
-    display:grid; grid-template-columns:44px 1fr; gap:18px; align-items:start;
-    background:var(--panel); border:1px solid var(--border); border-radius:12px;
-    padding:20px 22px; text-decoration:none; color:inherit;
-    transition:border-color .15s, background .15s, transform .15s;
-  }
-  a.sim:hover{background:var(--panel-2); border-color:var(--text-faint); transform:translateY(-1px);}
-  .n{font-family:var(--mono); font-size:19px; font-weight:600; line-height:1.35;}
-  .sim h2{font-size:17px; margin:0 0 5px; font-weight:600; letter-spacing:-.01em;}
-  .sim p{margin:0; font-size:14px; color:var(--text-dim);}
-  .sim .q{
-    display:block; margin-top:9px; font-family:var(--mono); font-size:11.5px;
-    color:var(--text-faint);
-  }
-  .foot{
-    margin-top:40px; padding-top:20px; border-top:1px solid var(--border);
-    font-family:var(--mono); font-size:11.5px; color:var(--text-faint); line-height:1.7;
-  }
-  @media (max-width:560px){
-    h1{font-size:25px;}
-    a.sim{grid-template-columns:1fr; gap:8px;}
-  }
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="wrap">
-  <div class="eyebrow">Marketing mix modeling · interactive</div>
-  <h1>How a marketing mix model actually decides</h1>
-  <p class="lede">
-    Five things you can pull on. Each one isolates a single decision the model makes, so you can
-    push it until it breaks and see why the answer changes. <strong>Everything runs in your
-    browser</strong> — no data leaves the page, and every number is illustrative.
-  </p>
+<div class="shell">
 
-  <div class="grid">
-    <a class="sim" href="mmm_pipeline_simulator.html">
-      <span class="n" style="color:var(--green)">01</span>
-      <span>
-        <h2>Trace one dollar</h2>
-        <p>Follow a single dollar through adstock, saturation, and the channel coefficient — next
-        to the same pipeline with that channel zeroed out. The gap between them <em>is</em> the
-        attributed outcome.</p>
-        <span class="q">→ why ROI is a difference, not a share</span>
-      </span>
-    </a>
+  <nav class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
+          <rect width="24" height="24" rx="4" fill="#0a66c2"/>
+          <path d="M6.4 9.3h2.4v8.2H6.4zM7.6 5.6a1.4 1.4 0 110 2.8 1.4 1.4 0 010-2.8zM10.6 9.3h2.3v1.1h.03c.32-.6 1.1-1.24 2.27-1.24 2.43 0 2.88 1.6 2.88 3.68v4.65h-2.4v-4.12c0-.98-.02-2.25-1.37-2.25-1.37 0-1.58 1.07-1.58 2.18v4.19h-2.4z" fill="#fff"/>
+        </svg>
+        Insights Layer
+      </div>
+      <div class="brand-sub">B2B marketing mix modeling<br>Scenario 41 · synthetic pilot</div>
+    </div>
 
-    <a class="sim" href="response_curves_simulator.html">
-      <span class="n" style="color:var(--blue)">02</span>
-      <span>
-        <h2>Read a response curve</h2>
-        <p>Reshape one channel's saturation curve and drag along it. The curve goes dashed past the
-        spend you've actually observed — beyond that line the model is extrapolating on functional
-        form alone.</p>
-        <span class="q">→ where your data ends and guessing starts</span>
-      </span>
-    </a>
+    <div class="nav-group">How it works</div>
+    <button class="nav-item on" data-page="method"><span class="t">1 · The core idea</span><span class="s">Turn a channel off, see what breaks</span></button>
+    <button class="nav-item live" data-page="simulator"><span class="t">2 · Trace one dollar</span><span class="s">Spend → adstock → saturation</span></button>
+    <button class="nav-item live" data-page="curvesim"><span class="t">3 · Read the curve</span><span class="s">Where your data ends and guessing starts</span></button>
+    <button class="nav-item live" data-page="outcomesim"><span class="t">4 · Pick an outcome</span><span class="s">One decision, four different answers</span></button>
+    <button class="nav-item live" data-page="mixsim"><span class="t">5 · Split the budget</span><span class="s">Equalise what the next dollar returns</span></button>
+    <button class="nav-item live" data-page="gatesim"><span class="t">6 · Decide if it ships</span><span class="s">Drive the three release gates</span></button>
 
-    <a class="sim" href="outcome_types_simulator.html">
-      <span class="n" style="color:var(--violet)">03</span>
-      <span>
-        <h2>Pick what to grow</h2>
-        <p>One spend decision, four outcomes — pipeline dollars, closed-won, qualified leads, stage
-        transitions. Different units, different answers. Starve one and watch it refuse to answer
-        at all.</p>
-        <span class="q">→ why a count ROI can't be compared to a dollar ROI</span>
-      </span>
-    </a>
+    <div class="nav-group">Under the hood</div>
+    <button class="nav-item" data-page="training"><span class="t">How it's trained</span><span class="s">Sampling a posterior, not fitting a line</span></button>
+    <button class="nav-item" data-page="contract"><span class="t">How it ships</span><span class="s">One JSON, every renderer</span></button>
 
-    <a class="sim" href="budget_mix_simulator.html">
-      <span class="n" style="color:var(--amber)">04</span>
-      <span>
-        <h2>Split the budget</h2>
-        <p>Drag channel shares against a fixed total, then optimise. The marginal returns converge
-        to equal across channels — which is the whole reason you don't just pour everything into
-        the highest-ROI one.</p>
-        <span class="q">→ where the next dollar should go</span>
-      </span>
-    </a>
+    <div class="nav-group">The pilot result</div>
+    <button class="nav-item" data-page="overview"><span class="t">The situation</span><span class="s">$1.55M, three channels, no evidence</span></button>
+    <button class="nav-item" data-page="outcomes"><span class="t">The recommendation</span><span class="s">Four outcomes, including a refusal</span></button>
+    <button class="nav-item" data-page="funnel"><span class="t">Per-stage ROI</span><span class="s">Where in the funnel money leaks</span></button>
+    <button class="nav-item" data-page="grains"><span class="t">ROI by segment</span><span class="s">Channel, segment, account</span></button>
+    <button class="nav-item" data-page="tiers"><span class="t">If the budget changes</span><span class="s">The same answer at six pot sizes</span></button>
+    <button class="nav-item" data-page="report"><span class="t">Executive report</span><span class="s">The eight Excel charts, live</span></button>
 
-    <a class="sim" href="reconciliation_stability_simulator.html">
-      <span class="n" style="color:var(--rose)">05</span>
-      <span>
-        <h2>Decide if it ships</h2>
-        <p>Drive the release gates yourself — sampler convergence, agreement with a real lift test,
-        and whether the ranking survives perturbed data. Any one of them can block the result.</p>
-        <span class="q">→ a model that can say "I don't know"</span>
-      </span>
-    </a>
-  </div>
+    <div class="nav-group">Can you trust it</div>
+    <button class="nav-item" data-page="validation"><span class="t">Blind validation</span><span class="s">Did it recover a known answer?</span></button>
+    <button class="nav-item" data-page="reconciliation"><span class="t">Reconciliation</span><span class="s">Model vs real lift experiments</span></button>
+    <button class="nav-item" data-page="confidence"><span class="t">Confidence score</span><span class="s">A subtraction ladder, not a vibe</span></button>
 
-  <p class="foot">
-    Illustrative parameters throughout · no real campaign data · runs entirely client-side<br>
-    Best read in order — each page assumes the one before it.
-  </p>
+    <div class="nav-group">Deliverables</div>
+    <button class="nav-item" data-page="excel"><span class="t">Excel workbook</span><span class="s">Three tabs, ten tables</span></button>
+    <button class="nav-item" data-page="powerbi"><span class="t">Power BI</span><span class="s">Same JSON, live tiles</span></button>
+    <button class="nav-item" data-page="deck"><span class="t">Slide deck</span></button>
+    <button class="nav-item" data-page="generated"><span class="t">Generated deck</span><span class="s">Built by the pipeline, not by hand</span></button>
+
+  </nav>
+
+  <main class="main">
+
+    <!-- ================= OVERVIEW ================= -->
+    <section class="page" id="p-overview">
+      <div class="eyebrow">Scenario 41 · fully synthetic</div>
+      <h1>A company with $1.55M and three places to put it</h1>
+      <p class="lede">
+        Twenty business accounts, a year of weekly data, three advertising channels.
+        The current split is almost exactly even — not because anyone proved that was
+        right, but because nobody could prove it was wrong.
+      </p>
+
+      <div class="card">
+        <div class="grid5" id="kpi-strip"></div>
+        <div class="note">
+          <div class="note-label">These are the workbook's own KPI cards</div>
+          <p>The Excel report opens on exactly these five figures, computed from the same
+          canonical JSON that drives this page.</p>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <h2>Where the money goes today</h2>
+          <p class="sub">Roughly a third each. No evidence behind it.</p>
+          <div id="current-split"></div>
+        </div>
+        <div class="card">
+          <h2>What the model found</h2>
+          <p class="sub">Closed-won revenue — the outcome finance actually recognises.</p>
+          <div id="overview-roi"></div>
+        </div>
+      </div>
+
+      <div id="overview-verdict"></div>
+
+      <div class="card">
+        <h2>The recommended split</h2>
+        <p class="sub">Same total budget of $1.55M. This is a better arrangement, not a request for more.</p>
+        <div id="overview-alloc"></div>
+      </div>
+
+      <div class="card">
+        <h2>Health gates</h2>
+        <p class="sub">All four must pass before anything is allowed to ship.</p>
+        <div class="grid4" id="overview-gates"></div>
+      </div>
+
+      <p class="foot" id="foot-1"></p>
+    </section>
+
+    <!-- ================= FOUR OUTCOMES ================= -->
+    <section class="page" id="p-outcomes">
+      <div class="eyebrow">One engine · four scoreboards</div>
+      <h1>What are you trying to grow?</h1>
+      <p class="lede">
+        The same fitted model answers four different business questions — and it does
+        <em>not</em> give the same advice for each. That's the finding, not a bug: fast
+        metrics aren't money, and real money is too slow to steer with.
+      </p>
+      <div class="tabs" id="oc-tabs"></div>
+      <div id="oc-body"></div>
+      <p class="foot" id="foot-2"></p>
+    </section>
+
+    <!-- ================= EXECUTIVE REPORT ================= -->
+    <section class="page" id="p-report">
+      <div class="eyebrow">Excel · Report tab</div>
+      <h1>The executive report, rendered live</h1>
+      <p class="lede">
+        Eight charts in four sections — this is what opens when someone double-clicks the
+        workbook. Every tile below is drawn from the same numbers the real export uses, and
+        every caption is the one the export writes.
+      </p>
+      <div class="card card-tight">
+        <div class="grid5" id="report-kpis"></div>
+      </div>
+      <div id="report-tiles"></div>
+      <p class="foot" id="foot-report"></p>
+    </section>
+
+    <!-- ================= GRAINS ================= -->
+    <section class="page" id="p-grains">
+      <div class="eyebrow">Three levels of zoom</div>
+      <h1>The same question, asked by three different people</h1>
+      <p class="lede">
+        One computation, three grains. The CMO asks about channels, the campaign marketer
+        asks about segments, the sales team asks about named accounts.
+      </p>
+
+      <div class="card">
+        <h2>Channel — the CMO's number</h2>
+        <p class="sub">How is LinkedIn Ads doing?</p>
+        <div id="grain-channel"></div>
+      </div>
+
+      <div class="card">
+        <h2>Segment — the campaign marketer's number</h2>
+        <p class="sub">Enterprise pays back 6×, SMB pays back 2×. That's a different budget conversation.</p>
+        <div id="grain-segment"></div>
+      </div>
+
+      <div class="card">
+        <h2>Account — the sales team's number</h2>
+        <p class="sub">Named accounts, synthetic. Eight of twenty shown.</p>
+        <div id="grain-account"></div>
+        <div class="note note-amber">
+          <div class="note-label">One rule that matters</div>
+          <p>For a segment you sum the dollars and divide once. You never average the
+          per-account ratios — do that and one $5 account with a freak 10× return outweighs
+          a $5M account. Plausible-looking, and quietly wrong.</p>
+        </div>
+      </div>
+      <p class="foot" id="foot-3"></p>
+    </section>
+
+    <!-- ================= BUDGET TIERS ================= -->
+    <section class="page" id="p-tiers">
+      <div class="eyebrow">Budget Tiers · a table in the workbook</div>
+      <h1>What if the pot isn't $1.55M?</h1>
+      <p class="lede">
+        Nobody plans one budget. They plan the one they have, the one they hope for, and the
+        one they'll get cut to. The optimizer runs at several total budgets and reports each
+        with its own confidence — including whether that budget is a size the model has ever
+        actually seen.
+      </p>
+      <div class="card">
+        <div id="tier-table"></div>
+        <div class="note note-amber">
+          <div class="note-label">Watch the last row</div>
+          <p>At 1.5× the budget, <code>in_modeled_range</code> flips to false. The model
+          never observed spending at that level, so the answer is extrapolation rather than
+          evidence — and confidence is docked 0.15 for exactly that reason.</p>
+        </div>
+      </div>
+      <div class="card">
+        <h2>How the recommended split drifts as the budget grows</h2>
+        <p class="sub">More money pushes share back toward the channels that saturate later.</p>
+        <div id="tier-chart"></div>
+      </div>
+      <p class="foot" id="foot-tiers"></p>
+    </section>
+
+    <!-- ================= CONFIDENCE ================= -->
+    <section class="page" id="p-confidence">
+      <div class="eyebrow">budget_mix.confidence_score</div>
+      <h1>Confidence is a subtraction, not a feeling</h1>
+      <p class="lede">
+        Every run starts at 1.0 and loses points for specific, named problems. The reasons
+        ship with the number, so nobody has to take the score on faith — they can read what
+        went wrong and decide for themselves.
+      </p>
+
+      <div class="card">
+        <h2>The deduction ladder</h2>
+        <p class="sub">Every one of these is a real branch in the scoring code.</p>
+        <div id="ladder"></div>
+      </div>
+
+      <div class="grid3" id="bands"></div>
+
+      <div class="card">
+        <h2>This run's score</h2>
+        <div id="score-walk"></div>
+      </div>
+
+      <div class="note note-blue">
+        <div class="note-label">Why bother</div>
+        <p>A tool that always returns a confident number gives you no way to tell knowing
+        from guessing. The score is what lets a person act on one answer and pause on
+        another — and the reasons are what let them argue with it.</p>
+      </div>
+      <p class="foot" id="foot-conf"></p>
+    </section>
+
+    <!-- ================= RECONCILIATION ================= -->
+    <section class="page" id="p-reconciliation">
+      <div class="eyebrow">Reconciliation · the outside check</div>
+      <h1>Does the model agree with a real experiment?</h1>
+      <p class="lede">
+        Where a genuine lift test exists — a holdout, a geo split — the model's answer gets
+        compared against it. This is the only part of the system where something outside the
+        model gets to say the model is wrong.
+      </p>
+
+      <div class="card">
+        <div id="recon-table"></div>
+      </div>
+
+      <div class="card">
+        <h2>The four verdicts</h2>
+        <p class="sub">This vocabulary is fixed in code — a new status has to be added to the enum.</p>
+        <div id="recon-vocab"></div>
+      </div>
+
+      <div class="note note-amber">
+        <div class="note-label">When they disagree, the experiment wins</div>
+        <p>A conflict costs 0.25 of the confidence score, tension costs 0.15, and having no
+        test at all costs 0.10. A model that quietly outvotes a real experiment is worse
+        than no model.</p>
+      </div>
+      <p class="foot" id="foot-recon"></p>
+    </section>
+
+    <!-- ================= PER-STAGE ROI ================= -->
+    <section class="page" id="p-funnel">
+      <div class="eyebrow">analyze/funnel.py · open PR</div>
+      <h1>One blended number hides where the money leaks</h1>
+      <p class="lede">
+        Counting stage transitions throws away two things that matter: <em>direction</em> and
+        <em>value</em>. A deal moving toward closed-won and a deal moving toward closed-lost
+        both count as exactly one. Giving every stage its own dollar outcome closes that gap —
+        and immediately turns up a finding a single ROI number cannot show.
+      </p>
+
+      <div class="card note-amber" style="box-shadow:none">
+        <div class="note-label">The blind spot this closes</div>
+        <p style="color:var(--text-2);margin-top:4px">
+          The count outcome sums the transition tensor over both stage axes. Direction and
+          value fall out in that sum. So a channel can look excellent at moving deals while
+          being the reason they die later — and nothing in a blended number would tell you.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>The ladder</h2>
+        <p class="sub">Four stages, top to bottom. Two of the CRM's stages deliberately aren't rungs.</p>
+        <div id="stage-ladder"></div>
+        <div id="stage-exclusions"></div>
+      </div>
+
+      <div class="card">
+        <h2>What a stage level means</h2>
+        <p class="sub">Two rules define it, and together they buy a free correctness check.</p>
+        <div id="stage-rules"></div>
+        <div class="note note-blue">
+          <div class="note-label">Why the invariant is worth having</div>
+          <p>Because credit is backfilled, stage dollars are cumulative <em>downward</em> — the
+          series can only fall as you go down the funnel, so every stage-to-stage ratio lands
+          in [0, 1] and is a genuine leak rate. That's not just tidy: a ratio above 1 is
+          impossible, so the check doubles as a probe on the data-prep layer. If one ever
+          appears, prep stopped crediting skipped stages.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Dollars driven to each stage</h2>
+        <p class="sub">Per channel, per stage. Recovered as expected ROI × actual spend — the channel-off counterfactual, multiplied back.</p>
+        <div id="stage-levels-chart"></div>
+        <div id="stage-levels-table"></div>
+      </div>
+
+      <div class="card">
+        <h2>ROI at every stage</h2>
+        <p class="sub">The same ROI contract as the main egress, repeated once per stage.</p>
+        <div id="funnel-roi-table"></div>
+        <div class="note">
+          <div class="note-label">Read across a row, not down a column</div>
+          <p>Every channel returns less as you go down — that's just the funnel narrowing. The
+          question worth asking is whether the <em>order</em> of the channels holds from top to
+          bottom. Here it doesn't.</p>
+        </div>
+      </div>
+
+      <div class="verdict verdict-hold">
+        <span class="badge badge-hold">REVERSAL</span>
+        <div>
+          <h2>LinkedIn Ads wins the top of the funnel and loses the bottom</h2>
+          <p>It generates leads more cheaply than anything else, then leaks harder than Search
+          at every step down. On revenue that actually closed, Search overtakes it. A single
+          blended ROI averages this away completely.</p>
+          <div class="verdict-note">Ranked on marginal ROI — the payoff of the next dollar — because that's what a reallocation decision actually turns on.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Rank reversals</h2>
+        <p class="sub">Channels whose rank at the top of the funnel differs from the bottom.</p>
+        <div id="reversal-table"></div>
+        <div class="note note-blue">
+          <div class="note-label">Why credibility is a between-channel question</div>
+          <p>A reversal means channel X outranked Y at the top and Y outranked X at the bottom.
+          What has to be believable is the <strong>X-against-Y gap at each end</strong>, so
+          <code>credible</code> is true only when the pair separates at both. Comparing one
+          channel's own interval across stages would answer a different question — and answer
+          it trivially, since stage dollars fall so hard that a channel's own intervals almost
+          never overlap across stages.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Carry-through — why the reversal happens</h2>
+        <p class="sub">The fraction of each stage's dollars that survive to the next.</p>
+        <div id="carry-chart"></div>
+        <div id="carry-table"></div>
+        <div class="note">
+          <div class="note-label">The pair naming isn't cosmetic</div>
+          <p>Columns are named <code>&lt;to&gt;/&lt;from&gt;</code>. On a partial funnel the
+          neighbouring stage isn't the adjacent one, and a bare <code>closed_won</code> column
+          would quietly read as opportunity-to-won when it's really lead-to-won.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>What this deliberately doesn't answer</h2>
+        <div id="velocity-gap"></div>
+      </div>
+
+      <div class="card note-blue" style="box-shadow:none">
+        <div class="note-label">Status</div>
+        <p style="color:var(--text-2);margin-top:4px">
+          The module and its tests are written and in review — not yet on master. No run has
+          been committed, so the per-stage figures on this page are <strong>illustrative</strong>.
+          They do satisfy the real invariants: levels never rise going down, and every
+          carry-through ratio sits inside [0, 1].
+        </p>
+      </div>
+      <p class="foot" id="foot-funnel"></p>
+    </section>
+
+    <!-- ================= VALIDATION ================= -->
+    <section class="page" id="p-validation">
+      <div class="eyebrow">Blind test</div>
+      <h1>We built a world where we knew the answer</h1>
+      <p class="lede">
+        There's no ground truth in real marketing data — you can never fully check yourself.
+        So: generate a fake company, secretly decide which channels actually work, hand the
+        model only the messy observational data, and see if it finds what you planted.
+      </p>
+      <div class="grid2">
+        <div class="card">
+          <h2>The answer key</h2>
+          <p class="sub">Planted before the data was generated. The model never sees this.</p>
+          <div id="val-key"></div>
+        </div>
+        <div class="card">
+          <h2>What the model recovered</h2>
+          <p class="sub">From observational data alone — no experiments.</p>
+          <div id="val-got"></div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Grading</h2>
+        <div class="grid4" id="val-grade"></div>
+        <div class="note">
+          <div class="note-label">Why the levels aren't expected to match exactly</div>
+          <p>Recovering exact per-channel dollars from observational data alone isn't
+          possible — <strong>a perfect match would be a red flag</strong>, not a triumph.
+          What is recoverable is the <strong>ranking</strong>, and the ranking is what a
+          budget decision actually depends on.</p>
+        </div>
+      </div>
+      <p class="foot" id="foot-4"></p>
+    </section>
+
+    <!-- ================= METHOD ================= -->
+    <section class="page on" id="p-method">
+      <div class="eyebrow">The core idea · step 1 of 6</div>
+      <h1>Turn it off and see what breaks</h1>
+      <p class="lede">
+        A fitted model does not contain ROI. It contains decay rates, saturation constants,
+        and per-account effects — not one number a marketer would ask for. Every KPI has to
+        be built, and the move is always the same.
+      </p>
+
+      <div class="card">
+        <div class="steps">
+          <div class="step"><div class="step-n">1</div><div>
+            <h3>Replay the world as it happened</h3>
+            <p>Push the real spend back through the fitted model. It reproduces roughly what
+            actually occurred, because that's what it was fit to.</p>
+          </div></div>
+          <div class="step"><div class="step-n">2</div><div>
+            <h3>Replay it again with one channel switched off</h3>
+            <p>Same model, same everything, except LinkedIn Ads spend is set to zero for the
+            whole year. Some revenue survives — the customers who'd have come anyway.</p>
+          </div></div>
+          <div class="step"><div class="step-n">3</div><div>
+            <h3>The gap is what the channel earned</h3>
+            <p>Difference the two worlds, divide by what was spent. That's the return
+            multiple — and it's a causal question, not a share of credit.</p>
+          </div></div>
+        </div>
+        <div class="note note-blue">
+          <div class="note-label">Why not just count clicks</div>
+          <p>Counting the sales that touched an ad takes credit for the weather. Some of
+          those people were going to buy regardless. The only honest question is how much
+          outcome <em>disappears</em> when the channel does.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>All four thousand versions, the whole way through</h2>
+        <p class="sub">The single most important implementation decision.</p>
+        <p style="color:var(--text-2)">
+          The model doesn't produce one answer, it produces four thousand — each a coherent
+          version of how the year could have worked. Every step above runs on all four
+          thousand, and they collapse to a median and a 90% range only at the very last
+          moment.
+        </p>
+        <div class="note note-amber">
+          <div class="note-label">Why it can't be done the cheap way</div>
+          <p>Adstock and saturation are curved, so the average of the answers isn't the
+          answer for the average. Collapse early and you get a biased number with a
+          confident-looking error bar bolted onto it.</p>
+        </div>
+        <div class="note">
+          <div class="note-label">Median, not mean</div>
+          <p>Deal sizes are skewed about 44× between typical and largest. The mean gets
+          dragged around by a handful of enormous deals; the median describes an account you'd
+          actually recognise.</p>
+        </div>
+      </div>
+      <p class="foot" id="foot-5"></p>
+    </section>
+
+    <!-- ================= SIMULATOR ================= -->
+    <section class="page" id="p-simulator">
+      <div class="eyebrow">Interactive · step 2 of 6</div>
+      <h1>Follow one dollar all the way to an outcome</h1>
+      <p class="lede">
+        The page before this describes the counterfactual in words. This one lets you run it.
+        Move the sliders and watch one channel's dollars travel through adstock, saturation,
+        and the fitted coefficient — real spend against the zeroed-out world — down to a
+        single ROI number.
+      </p>
+
+      <div class="card">
+        <h2>The six numbers</h2>
+        <p class="sub">Two come from your data. Four are what the model learns.</p>
+        <div class="sim-controls">
+          <div class="sim-ctl">
+            <label>Today's spend <span class="sim-val" id="v-spend">$1,000</span></label>
+            <input type="range" id="sim-spend" min="0" max="5000" step="10" value="1000">
+            <div class="sim-desc"><span class="sim-src sim-src-data">from data</span>The actual budget you put into this channel today.</div>
+          </div>
+          <div class="sim-ctl">
+            <label>Yesterday's carryover <span class="sim-val" id="v-carry">400</span></label>
+            <input type="range" id="sim-carry" min="0" max="2000" step="10" value="400">
+            <div class="sim-desc"><span class="sim-src sim-src-data">from data</span>Leftover exposure still working from yesterday's spend.</div>
+          </div>
+          <div class="sim-ctl">
+            <label>Decay rate <span class="sim-val" id="v-decay">0.30</span></label>
+            <input type="range" id="sim-decay" min="0" max="0.9" step="0.01" value="0.3">
+            <div class="sim-desc"><span class="sim-src">learned</span>How much of today's impact lingers into tomorrow — a webinar someone half-remembers weeks later.</div>
+          </div>
+          <div class="sim-ctl">
+            <label>Coefficient (ceiling) <span class="sim-val" id="v-coef">8,500</span></label>
+            <input type="range" id="sim-coef" min="1000" max="15000" step="50" value="8500">
+            <div class="sim-desc"><span class="sim-src">learned</span>The most this channel could ever contribute, even with unlimited budget.</div>
+          </div>
+          <div class="sim-ctl">
+            <label>Half-saturation <span class="sim-val" id="v-halfsat">900</span></label>
+            <input type="range" id="sim-halfsat" min="100" max="3000" step="10" value="900">
+            <div class="sim-desc"><span class="sim-src">learned</span>The spend level where this channel is already halfway maxed out.</div>
+          </div>
+          <div class="sim-ctl">
+            <label>Slope <span class="sim-val" id="v-slope">1.50</span></label>
+            <input type="range" id="sim-slope" min="0.5" max="4" step="0.05" value="1.5">
+            <div class="sim-desc"><span class="sim-src">learned</span>How abruptly returns taper off — higher means diminishing returns hit sooner.</div>
+          </div>
+        </div>
+        <div class="note note-blue">
+          <div class="note-label">What you're actually moving</div>
+          <p>The two <em>from data</em> sliders are inputs the model never estimates — they're
+          what happened. The four <em>learned</em> sliders are parameters the sampler infers,
+          and in the real system each one is a whole distribution, not a single value. Dragging
+          them by hand is a way of asking "what if the model had concluded something else?"</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>The counterfactual, side by side</h2>
+        <p class="sub">Every KPI in this project is built on this chain — run twice. One world
+        has the spend, one doesn't, and the gap between them is the whole answer.</p>
+        <div class="sim-pgrid">
+        <div class="sim-pcol">
+          <div class="sim-col-head sim-col-real">Real spend, replayed</div>
+          <div class="sim-pipeline">
+            <div class="sim-stage" id="sim-stage-spend">
+              <div class="sim-stage-head"><span class="sim-stage-name">1 · Raw spend</span><span class="sim-stage-tag">from data</span></div>
+              <div class="sim-formula" id="f-spend"></div>
+              <div class="sim-result"><span class="sim-rlabel">today's dollars in</span><span id="r-spend"></span></div>
+            </div>
+            <div class="sim-arrow">↓</div>
+            <div class="sim-stage" id="sim-stage-adstock">
+              <div class="sim-stage-head"><span class="sim-stage-name">2 · Adstock</span><span class="sim-stage-tag">learned: decay</span></div>
+              <div class="sim-formula" id="f-adstock"></div>
+              <div class="sim-result"><span class="sim-rlabel">effective exposure</span><span id="r-adstock"></span></div>
+            </div>
+            <div class="sim-arrow">↓</div>
+            <div class="sim-stage" id="sim-stage-sat">
+              <div class="sim-stage-head"><span class="sim-stage-name">3 · Hill saturation</span><span class="sim-stage-tag">learned: half-sat, slope</span></div>
+              <div class="sim-formula" id="f-sat"></div>
+              <div class="sim-result"><span class="sim-rlabel">% of max captured</span><span id="r-sat"></span></div>
+            </div>
+            <div class="sim-arrow">↓</div>
+            <div class="sim-stage" id="sim-stage-coef">
+              <div class="sim-stage-head"><span class="sim-stage-name">4 · Coefficient</span><span class="sim-stage-tag">learned: ceiling</span></div>
+              <div class="sim-formula" id="f-coef"></div>
+              <div class="sim-result"><span class="sim-rlabel">predicted outcome</span><span id="r-coef"></span></div>
+            </div>
+          </div>
+        </div>
+        <div class="sim-pcol sim-off">
+          <div class="sim-col-head sim-col-off">Channel zeroed out</div>
+          <div class="sim-pipeline">
+            <div class="sim-stage" id="sim-stage-spend-off">
+              <div class="sim-stage-head"><span class="sim-stage-name">1 · Raw spend</span><span class="sim-stage-tag">forced to zero</span></div>
+              <div class="sim-formula" id="f-spend-off"></div>
+              <div class="sim-result"><span class="sim-rlabel">today's dollars in</span><span id="r-spend-off"></span></div>
+            </div>
+            <div class="sim-arrow">↓</div>
+            <div class="sim-stage" id="sim-stage-adstock-off">
+              <div class="sim-stage-head"><span class="sim-stage-name">2 · Adstock</span><span class="sim-stage-tag">same decay</span></div>
+              <div class="sim-formula" id="f-adstock-off"></div>
+              <div class="sim-result"><span class="sim-rlabel">effective exposure</span><span id="r-adstock-off"></span></div>
+            </div>
+            <div class="sim-arrow">↓</div>
+            <div class="sim-stage" id="sim-stage-sat-off">
+              <div class="sim-stage-head"><span class="sim-stage-name">3 · Hill saturation</span><span class="sim-stage-tag">same curve</span></div>
+              <div class="sim-formula" id="f-sat-off"></div>
+              <div class="sim-result"><span class="sim-rlabel">% of max captured</span><span id="r-sat-off"></span></div>
+            </div>
+            <div class="sim-arrow">↓</div>
+            <div class="sim-stage" id="sim-stage-coef-off">
+              <div class="sim-stage-head"><span class="sim-stage-name">4 · Coefficient</span><span class="sim-stage-tag">same ceiling</span></div>
+              <div class="sim-formula" id="f-coef-off"></div>
+              <div class="sim-result"><span class="sim-rlabel">predicted outcome</span><span id="r-coef-off"></span></div>
+            </div>
+          </div>
+        </div>
+        </div>
+        <p class="sub" style="margin:16px 0 0">
+          Same decay, half-saturation, slope, and coefficient on both sides — nothing about the
+          model changes. Only the spend going in differs.
+        </p>
+        <div class="sim-roi" id="sim-roi">
+          <div class="sim-roi-metric"><span class="sim-roi-label">delta (real − off)</span><span class="sim-roi-v" id="roi-delta">—</span></div>
+          <div class="sim-roi-op">÷</div>
+          <div class="sim-roi-metric"><span class="sim-roi-label">spend</span><span class="sim-roi-v" id="roi-spend">—</span></div>
+          <div class="sim-roi-op">=</div>
+          <div class="sim-roi-metric"><span class="sim-roi-label">average ROI</span><span class="sim-roi-v sim-roi-final" id="roi-final">—</span></div>
+          <div class="sim-roi-sep"></div>
+          <div class="sim-roi-metric"><span class="sim-roi-label">marginal ROI (next $)</span><span class="sim-roi-v sim-roi-mroi" id="mroi-final">—</span></div>
+        </div>
+        <div id="sim-roi-sentinel"></div>
+        <p class="sub" style="margin-top:-4px">
+          <strong>Average ROI</strong> is the return on every dollar already spent.
+          <strong>Marginal ROI</strong> is the slope of the curve right now — what the
+          <em>next</em> dollar would earn. Read straight off the response curve below.
+          These two diverge as a channel saturates, and that gap is the whole reason the
+          optimiser doesn't just pile budget into the highest-ROI channel.
+        </p>
+        <div class="note note-amber">
+          <div class="note-label">Notice what happens at zero spend</div>
+          <p>The zeroed-out column still shows carryover working through — yesterday's dollars
+          don't vanish because today's stopped. That residue is why the honest question is
+          "how much outcome disappears", not "how many sales touched an ad".</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Response curve</h2>
+        <p class="sub">The same pipeline swept across every spend level. The dot tracks your slider.</p>
+        <svg id="sim-curve" width="100%" viewBox="0 0 900 280" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="note">
+          <div class="note-label">Why the curve bends</div>
+          <p>Flat at the end is saturation — the market can only absorb so much at once. The
+          <span style="color:var(--amber);font-weight:600">amber tangent</span> at your dot is
+          <em>marginal</em> ROI: the return on the next dollar. Push spend high enough and the
+          tangent goes flat while average ROI still looks healthy. That's a saturated channel,
+          and it's exactly the situation where the honest recommendation is "stop adding here".</p>
+        </div>
+      </div>
+
+      <div class="note note-blue" style="max-width:none">
+        <div class="note-label">One draw, one day</div>
+        <p>This traces a single day under a single posterior draw. The real system runs this
+        entire chain for all 4,000 draws across every account and week, then collapses to a
+        median and a 90% range at the very last moment — because adstock and saturation are
+        curved, so the average of the answers isn't the answer for the average.</p>
+      </div>
+      <p class="foot" id="foot-sim"></p>
+    </section>
+
+    <!-- ================= RESPONSE CURVES ================= -->
+    <section class="page" id="p-curvesim">
+      <div class="eyebrow">Interactive · step 3 of 6</div>
+      <h1>One channel's whole story, not just one number</h1>
+      <p class="lede">
+        ROI is a single point on a curve. This is the curve behind it. Reshape it, drag along it,
+        and watch where your real data stops and the model starts extrapolating on assumption
+        alone — the thing that costs a recommendation confidence in production.
+      </p>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>Hill saturation</h2>
+          <span class="card-tag">what every curve here plots</span>
+        </div>
+        <div class="rc-banner">
+          outcome = <span class="num">coefficient</span> × spend<sup>slope</sup> ÷ ( spend<sup>slope</sup> + half-saturation<sup>slope</sup> )
+        </div>
+        <p class="sub" style="margin:12px 0 0">
+          Three parameters, three different jobs. <strong>Coefficient</strong> sets the ceiling —
+          the most this channel could ever contribute. <strong>Half-saturation</strong> is the
+          spend level where you've captured half of that ceiling. <strong>Slope</strong> controls
+          how abruptly diminishing returns arrive. All three are learned per channel, and in the
+          real system each is a distribution, not a number.
+        </p>
+      </div>
+
+      <div class="rc-tabs" id="rc-tabs"></div>
+
+      <div class="rc-layout">
+        <div class="card">
+          <h2 style="font-size:14px">Curve shape</h2>
+          <div class="rc-ctl">
+            <label>Ceiling — most it could ever return <span class="v" id="rc-v-coef"></span></label>
+            <input type="range" id="rc-coef" min="1000" max="16000" step="50">
+          </div>
+          <div class="rc-ctl">
+            <label>Spend that gets you halfway there <span class="v" id="rc-v-halfsat"></span></label>
+            <input type="range" id="rc-halfsat" min="100" max="3500" step="10">
+          </div>
+          <div class="rc-ctl">
+            <label>How fast returns taper off <span class="v" id="rc-v-slope"></span></label>
+            <input type="range" id="rc-slope" min="0.5" max="4" step="0.05">
+          </div>
+          <div class="rc-ctl">
+            <label>Most you've ever actually spent <span class="v" id="rc-v-observed"></span></label>
+            <input type="range" id="rc-observed" min="500" max="5000" step="50">
+          </div>
+          <div class="rc-toggle-row">
+            <span>Compare all channels</span>
+            <div class="gs-track" id="rc-compare" role="switch" aria-checked="false" tabindex="0"><div class="gs-knob"></div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="rc-legend">
+            <span class="li"><span class="sw" id="rc-sw-main"></span>this channel</span>
+            <span class="li"><span class="sw sw-dash"></span>past your data — extrapolating</span>
+            <span class="li"><span class="sw" style="background:#915907"></span>tangent = marginal ROI</span>
+          </div>
+          <svg id="rc-curve" width="100%" viewBox="0 0 900 320" preserveAspectRatio="xMidYMid meet"></svg>
+          <div class="rc-ctl" style="margin-top:10px">
+            <label>Spend — drag along the curve <span class="v" id="rc-v-spend"></span></label>
+            <input type="range" id="rc-spend" min="0" max="5000" step="10">
+          </div>
+          <div class="rc-readout">
+            <div class="rc-metric"><span class="rc-label">predicted outcome</span><span class="rc-v" id="rc-out"></span></div>
+            <div class="rc-metric"><span class="rc-label">average ROI here</span><span class="rc-v" id="rc-roi"></span></div>
+            <div class="rc-metric"><span class="rc-label">marginal ROI, next $</span><span class="rc-v rc-mroi" id="rc-mroi"></span></div>
+            <div class="rc-metric"><span class="rc-label">is this spend supported?</span><span class="rc-v" id="rc-status"></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="note note-amber" style="max-width:none">
+        <div class="note-label">Why "extrapolated" is a real penalty, not a caption</div>
+        <p>The shaded region is spend you've actually run. Past that line the curve is the model's
+        <em>assumption</em> about a regime it has never observed — the Hill shape continues
+        because that's the functional form, not because anything confirmed it. Production tracks
+        this as <code>in_modeled_range</code>, and a recommendation that lands outside it takes a
+        <strong>−0.15</strong> hit to its confidence score under <code>BUDGET_OUT_OF_RANGE</code>.
+        It's the difference between "we measured this" and "the curve says so".</p>
+      </div>
+
+      <div class="note note-blue" style="max-width:none">
+        <div class="note-label">Flatten the slope and watch both numbers move</div>
+        <p>Drag spend to the right on any channel: average ROI declines gently while marginal ROI
+        falls off a cliff. That divergence is what the budget optimiser reallocates on — a channel
+        can still look profitable on average long after its next dollar has stopped being worth
+        spending. Turn on <em>compare all channels</em> to see why the answer is never "put it all
+        in the best one": the curves cross, so which channel deserves the next dollar depends
+        entirely on where each one currently sits.</p>
+      </div>
+      <p class="foot" id="foot-curvesim"></p>
+    </section>
+
+    <!-- ================= BUDGET MIX SIMULATOR ================= -->
+    <section class="page" id="p-mixsim">
+      <div class="eyebrow">Interactive · step 5 of 6</div>
+      <h1>Where should the next dollar go</h1>
+      <p class="lede">
+        The previous page traced one dollar into one channel. This one asks the question
+        the optimiser actually answers: given a fixed pot, how should it be split? Drag any
+        share and the others rebalance to keep the total at 100%. Each channel has its own
+        diminishing-returns curve — watch marginal ROI diverge as you overspend one, then
+        hit optimise to see where the solver lands.
+      </p>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-head">
+            <h2>Allocation</h2>
+            <span class="card-tag">sliders sum to 100%</span>
+          </div>
+          <div class="mix-budget">
+            <label for="mix-budget-input">Total budget</label>
+            <input type="number" id="mix-budget-input" value="10000" min="1000" max="50000" step="500">
+          </div>
+          <div id="mix-channels"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h2>Spend split</h2>
+            <span class="card-tag">live</span>
+          </div>
+          <div class="mix-pie-wrap">
+            <svg id="mix-pie" width="220" height="220" viewBox="0 0 220 220"></svg>
+            <div class="mix-legend" id="mix-legend"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="mix-totals">
+          <div class="mix-metric">
+            <span class="mix-label">total predicted outcome</span>
+            <span class="mix-v" id="mix-total-out">—</span>
+          </div>
+          <div class="mix-metric">
+            <span class="mix-label">vs even split</span>
+            <span class="mix-v" id="mix-delta-out">—</span>
+          </div>
+          <div class="mix-metric">
+            <span class="mix-label">marginal ROI spread</span>
+            <span class="mix-v" id="mix-spread">—</span>
+          </div>
+        </div>
+        <div class="mix-actions">
+          <button class="mix-btn mix-btn-primary" id="mix-optimize">Optimise</button>
+          <button class="mix-btn" id="mix-reset">Reset to even split</button>
+        </div>
+        <div class="note">
+          <div class="note-label">What optimising actually does</div>
+          <p>It moves budget away from whichever channel has the <em>lowest</em> marginal ROI —
+          the value of its next dollar — toward whichever has the <em>highest</em>, repeating
+          until every channel's next dollar is worth about the same. That equal-marginal-return
+          point is the mathematical optimum. Note it is <strong>not</strong> the channel with the
+          best average ROI that wins the money; it's the one whose curve still has room to climb.
+          Watch the spread above collapse toward zero as it converges.</p>
+        </div>
+      </div>
+
+      <div class="note note-blue" style="max-width:none">
+        <div class="note-label">How this differs from the real solver</div>
+        <p>This page uses equal-marginal-return hill climbing, which is the intuition behind the
+        answer. The production path calls <code>scipy.optimize.minimize</code> with SLSQP
+        (<code>maxiter 200</code>, <code>ftol 1e-7</code>) against the full posterior — it maximises
+        mean predicted outcome across all 4,000 draws subject to shares summing to 1 and
+        per-channel bounds, then projects back into those bounds. Same optimality condition,
+        but run once per draw rather than on a single illustrative curve.</p>
+      </div>
+      <p class="foot" id="foot-mixsim"></p>
+    </section>
+
+    <!-- ================= GATE SIMULATOR ================= -->
+    <section class="page" id="p-gatesim">
+      <div class="eyebrow">Interactive · step 6 of 6</div>
+      <h1>Decide whether this result ships</h1>
+      <p class="lede">
+        Three separate questions, three separate checks, asked in order. Move the sliders and
+        toggles and watch each gate — and the final verdict — respond the way the real pipeline
+        would. Every threshold below is the actual value from source, not a stand-in.
+      </p>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>1 · Convergence gates</h2>
+          <span class="badge" id="gs-conv-badge">—</span>
+        </div>
+        <p class="sub">Did the sampler produce a trustworthy posterior at all? Checked first,
+        because nothing downstream means anything if this fails.</p>
+        <div class="gs-grid">
+          <div class="gs-gate">
+            <div class="gs-gate-top"><span class="gs-gate-name">r̂ (max)</span><span class="gs-gate-val" id="gs-rhat-val"></span></div>
+            <input type="range" id="gs-rhat" min="1.000" max="1.150" step="0.001" value="1.008">
+            <div class="gs-thresh">pass if ≤ 1.01</div>
+          </div>
+          <div class="gs-gate">
+            <div class="gs-gate-top"><span class="gs-gate-name">ESS bulk (min)</span><span class="gs-gate-val" id="gs-essb-val"></span></div>
+            <input type="range" id="gs-essb" min="0" max="2000" step="10" value="650">
+            <div class="gs-thresh">pass if ≥ 400</div>
+          </div>
+          <div class="gs-gate">
+            <div class="gs-gate-top"><span class="gs-gate-name">ESS tail (min)</span><span class="gs-gate-val" id="gs-esst-val"></span></div>
+            <input type="range" id="gs-esst" min="0" max="2000" step="10" value="580">
+            <div class="gs-thresh">pass if ≥ 400</div>
+          </div>
+          <div class="gs-gate">
+            <div class="gs-gate-top"><span class="gs-gate-name">divergences</span><span class="gs-gate-val" id="gs-div-val"></span></div>
+            <input type="range" id="gs-div" min="0" max="50" step="1" value="0">
+            <div class="gs-thresh">pass if = 0</div>
+          </div>
+        </div>
+        <div class="note" style="margin-top:16px">
+          <div class="note-label">Why divergences gate at exactly zero</div>
+          <p>A divergence isn't noise — it's the sampler reporting it couldn't traverse a region
+          of the posterior. Those draws are biased in a <em>direction</em>, not merely imprecise,
+          so "a few" is not a tolerable amount.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>2 · Reconciliation</h2>
+          <span class="badge" id="gs-recon-badge">—</span>
+        </div>
+        <p class="sub">Does the model agree with a randomised lift test — real external evidence,
+        not another view of the same posterior? This is the only check that touches ground truth.</p>
+
+        <div class="grid2">
+          <div class="gs-field">
+            <div class="gs-flabel">Model ROI (posterior mean)</div>
+            <input type="range" id="gs-model" min="2" max="7" step="0.01" value="4.43">
+            <div class="gs-fval" id="gs-model-val"></div>
+          </div>
+          <div class="gs-field">
+            <div class="gs-flabel">Lift-test ROI (measured)</div>
+            <input type="range" id="gs-lift" min="2" max="7" step="0.01" value="4.10">
+            <div class="gs-fval" id="gs-lift-val"></div>
+          </div>
+          <div class="gs-field">
+            <div class="gs-flabel">σ model (posterior SD)</div>
+            <input type="range" id="gs-sigmam" min="0.05" max="1.5" step="0.01" value="0.42">
+            <div class="gs-fval" id="gs-sigmam-val"></div>
+          </div>
+          <div class="gs-field">
+            <div class="gs-flabel">σ lift (experiment SE)</div>
+            <input type="range" id="gs-sigmal" min="0.05" max="1.5" step="0.01" value="0.35">
+            <div class="gs-fval" id="gs-sigmal-val"></div>
+          </div>
+        </div>
+
+        <div class="gs-zbar">
+          <div class="gs-zbar-track">
+            <div class="gs-zband gs-zband-agree">AGREE</div>
+            <div class="gs-zband gs-zband-tension">TENSION</div>
+            <div class="gs-zband gs-zband-conflict">CONFLICT</div>
+            <div class="gs-zmark" id="gs-zmark"></div>
+          </div>
+          <div class="gs-zscale"><span>Z = 0</span><span>1</span><span>2</span><span>3+</span></div>
+        </div>
+
+        <div class="gs-zreadout">
+          <div><span class="gs-flabel">gap</span><span class="gs-fval" id="gs-gap"></span></div>
+          <div><span class="gs-flabel">denominator √(σ²ₘ + σ²ₗ)</span><span class="gs-fval" id="gs-denom"></span></div>
+          <div><span class="gs-flabel">Z score</span><span class="gs-fval" id="gs-z"></span></div>
+        </div>
+
+        <div class="note">
+          <div class="note-label">Why the denominator carries both σ</div>
+          <p>This is a <strong>two-sample</strong> Z. Treating the experiment as exact ground
+          truth with zero error would manufacture CONFLICTs out of noisy lift tests. Widen
+          <em>either</em> σ and the same gap becomes less damning — which is correct, because
+          two uncertain estimates disagreeing by a little is not evidence of anything.</p>
+          <p style="margin-top:8px">Note the flip side, which the source calls intended: a very
+          tight posterior trips CONFLICT on a small gap, while an under-converged one can barely
+          reach TENSION even on a large gap. That's why convergence is gate 1 — an
+          under-converged fit should be stopped before it ever gets here.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>3 · Stability</h2>
+          <span class="badge" id="gs-stab-badge">—</span>
+        </div>
+        <p class="sub">Perturb the data ten ways and re-run. Does the top-3 ranking survive?
+        These are the ten real perturbations, in RFC order — toggle each to say whether the
+        recommendation held.</p>
+        <div class="gs-toggles" id="gs-toggles"></div>
+        <div class="gs-stab-summary">
+          <span id="gs-stab-count"></span>
+          <span class="gs-thresh">10/10 High · 9–8/10 Medium · ≤7/10 Low</span>
+        </div>
+        <div class="note" style="margin-top:16px">
+          <div class="note-label">The model is never re-fitted</div>
+          <p>This is a fit-once, read-only sensitivity analysis. Re-running the sampler with a
+          different seed would only measure Monte Carlo noise — the RFC explicitly rules that out
+          ("Pillar 3 is NOT random-seed resampling"). A loop also only fails on a
+          <em>beyond-noise</em> reorder: if two channels' 90% intervals overlap, or their medians
+          sit within 5%, swapping them is a tie, not instability.</p>
+        </div>
+      </div>
+
+      <div class="card gs-verdict">
+        <div class="gs-verdict-label">Final verdict</div>
+        <div class="gs-verdict-name" id="gs-verdict-name">—</div>
+        <div class="gs-verdict-desc" id="gs-verdict-desc"></div>
+      </div>
+
+      <div class="note note-blue" style="max-width:none">
+        <div class="note-label">Why the order matters</div>
+        <p>These aren't three scores to average — they're a sequence, and each one is only
+        meaningful if the previous passed. Fail convergence and the numbers aren't numbers.
+        Pass convergence but conflict with a lift test and the model is converged and
+        <em>wrong</em>. Pass both but fail stability and the model may well be right, yet the
+        specific recommendation isn't robust enough to move budget on. A model can be stable and
+        wrong, or right and unstable, which is exactly why one gate can't replace the others.</p>
+      </div>
+      <p class="foot" id="foot-gatesim"></p>
+    </section>
+
+    <!-- ================= OUTCOME TYPES ================= -->
+    <section class="page" id="p-outcomesim">
+      <div class="eyebrow">Interactive · step 4 of 6</div>
+      <h1>One spend decision, four honest answers</h1>
+      <p class="lede">
+        The model doesn't check one metric. It checks four at once, off the same frozen
+        posterior — and any one of them can refuse to answer if the data behind it is too thin,
+        instead of guessing. Move the sliders and watch an outcome drop out.
+      </p>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>Where each one sits on the funnel</h2>
+          <span class="card-tag">the same account, four places to measure it</span>
+        </div>
+        <p class="sub">An account walks these four stages in order. Each outcome measures a
+        different point on that walk — which is why they disagree, and why measuring only the
+        last one means waiting a quarter to learn anything.</p>
+
+        <div class="fr-rail">
+          <div class="fr-stage" style="--s:#01754f">
+            <div class="fr-node">Lead</div>
+            <div class="fr-def">Someone raised a hand</div>
+          </div>
+          <div class="fr-arrow"><span>&rarr;</span></div>
+          <div class="fr-stage" style="--s:#01754f">
+            <div class="fr-node">Qualified</div>
+            <div class="fr-def">Worth a salesperson's time</div>
+          </div>
+          <div class="fr-arrow"><span>&rarr;</span></div>
+          <div class="fr-stage" style="--s:#0a66c2">
+            <div class="fr-node">Opportunity</div>
+            <div class="fr-def">A real deal with a dollar value</div>
+          </div>
+          <div class="fr-arrow"><span>&rarr;</span></div>
+          <div class="fr-stage" style="--s:#915907">
+            <div class="fr-node">Closed won</div>
+            <div class="fr-def">Signed and invoiced</div>
+          </div>
+        </div>
+
+        <div class="fr-measures">
+          <div class="fr-m" style="--s:#01754f">
+            <span class="fr-m-t">Qualified Leads</span>
+            <span class="fr-m-w">counts accounts that reach <strong>Qualified</strong></span>
+          </div>
+          <div class="fr-m" style="--s:#0a66c2">
+            <span class="fr-m-t">Pipeline Revenue</span>
+            <span class="fr-m-w">sums deal value sitting at <strong>Opportunity</strong></span>
+          </div>
+          <div class="fr-m" style="--s:#6a5acd">
+            <span class="fr-m-t">Stage Transitions</span>
+            <span class="fr-m-w">counts the <strong>arrows</strong>, not the stages &mdash; any forward step</span>
+          </div>
+          <div class="fr-m" style="--s:#915907">
+            <span class="fr-m-t">Closed-Won Revenue</span>
+            <span class="fr-m-w">sums deal value that reaches <strong>Closed won</strong></span>
+          </div>
+        </div>
+
+        <div class="note note-blue" style="max-width:none;margin-top:16px">
+          <div class="note-label">A deal is credited at every stage it passed</div>
+          <p>Reach Closed won and you're counted at Qualified and Opportunity too, even if the
+          CRM never logged those steps — the deal demonstrably got that deep. Without that
+          backfill a fast-moving deal would look like it never qualified. Dollars are recorded
+          unweighted: a $100K deal at Opportunity contributes $100K there, not $100K times some
+          win probability.</p>
+        </div>
+
+        <div class="fr-excl">
+          <span class="fr-excl-h">Two stages deliberately left off the ladder</span>
+          <div><code>closed_lost</code> &mdash; an ending, not progress. Dropped silently.</div>
+          <div><code>prospect</code> &mdash; folded into the stage below, so no outcome is fit for
+          it. It's still named so an error can tell you which stage to use instead.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>What the four actually measure</h2>
+        <p class="sub">They're not four versions of the same thing. Two are dollars, two are
+        counts, and they move on completely different clocks.</p>
+        <table class="oc-table">
+          <thead>
+            <tr><th>Outcome</th><th>Unit</th><th>Typical lag</th><th>What "ROI" means here</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="oc-dot" style="background:#01754f"></span>Qualified Leads</td>
+              <td>Count</td><td>Days — earliest funnel signal</td>
+              <td>A rate: leads surfaced per dollar, not revenue</td>
+            </tr>
+            <tr>
+              <td><span class="oc-dot" style="background:#0a66c2"></span>Pipeline Revenue</td>
+              <td>Dollars</td><td>Days to weeks — reacts fastest</td>
+              <td>Dollars of open deal value per dollar spent</td>
+            </tr>
+            <tr>
+              <td><span class="oc-dot" style="background:#6a5acd"></span>Stage Transitions</td>
+              <td>Count</td><td>Weeks — tracks momentum, not entry</td>
+              <td>A rate: stage advances per dollar, not revenue</td>
+            </tr>
+            <tr>
+              <td><span class="oc-dot" style="background:#915907"></span>Closed-Won Revenue</td>
+              <td>Dollars</td><td>Months — the slowest to move</td>
+              <td>Dollars of signed revenue per dollar spent</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="note" style="margin-top:16px">
+          <div class="note-label">Why a count can't be compared to a dollar</div>
+          <p>Qualified Leads and Stage Transitions have no dollar value attached, so their "ROI"
+          is a <em>rate</em> — advances per dollar. A 0.004 next to a 4.55&times; isn't a worse
+          channel, it's a different unit. That's also why count outcomes additionally emit
+          <code>cost_per_outcome_usd</code>, which inverts to dollars-per-thing and is the number
+          a human can actually reason about.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Shared inputs</h2>
+        <p class="sub">Adstock happens once, upstream of all four. It describes how this
+        channel's exposure lingers, not how any one outcome responds to it — so the same
+        adstocked exposure feeds every card below. Only saturation and the coefficient
+        after that point are per-outcome.</p>
+        <div class="oc-inputs">
+          <div class="oc-input">
+            <label>Today's spend in this channel <span class="sim-val" id="oc-spend-val"></span></label>
+            <input type="range" id="oc-spend" min="0" max="5000" step="50" value="1800">
+          </div>
+          <div class="oc-input">
+            <label>Decay — how much lingers to tomorrow <span class="sim-val" id="oc-decay-val"></span></label>
+            <input type="range" id="oc-decay" min="0" max="0.9" step="0.01" value="0.3">
+          </div>
+          <div class="oc-input">
+            <label>Yesterday's leftover exposure <span class="sim-val" id="oc-carry-val"></span></label>
+            <input type="range" id="oc-carry" min="0" max="2000" step="10" value="400">
+          </div>
+        </div>
+        <div class="oc-shared" id="oc-shared"></div>
+      </div>
+
+      <div class="oc-grid" id="oc-cards"></div>
+
+      <div class="note note-amber" style="max-width:none">
+        <div class="note-label">These four curves are illustrative</div>
+        <p>Coefficient, half-saturation and slope below are hand-picked so the four outcomes look
+        sensibly different from each other. They are not derived from a fit. In the real system
+        every one of them comes out of NUTS sampling against actual history, with a different
+        value on every posterior draw. The <em>shapes</em> and the refusal logic are real; the
+        specific numbers are not.</p>
+      </div>
+
+      <div class="note note-blue" style="max-width:none">
+        <div class="note-label">The refusal is the point</div>
+        <p>Drag a signal-strength slider low enough and that outcome stops answering — exactly
+        what Pipeline Revenue does in the live scenario. The ESS gate is checked <em>before</em>
+        anything is computed, so a thin outcome never produces a confident-looking number that
+        happens to rest on nothing. An honest "not enough data here" is more useful than a
+        precise guess, and it's the behaviour that makes the other three trustworthy.</p>
+      </div>
+      <p class="foot" id="foot-outcomesim"></p>
+    </section>
+
+    <!-- ================= TRAINING ================= -->
+    <section class="page" id="p-training">
+      <div class="eyebrow">Under the hood</div>
+      <h1>How the model gets fit</h1>
+      <p class="lede">
+        Not trained in the gradient-descent sense — there's no loss function or epochs. It's
+        <em>sampled</em>. You describe the structure, and a sampler explores which parameter
+        values are consistent with what actually happened.
+      </p>
+
+      <div class="card">
+        <h2>The structure, in the order data flows</h2>
+        <div class="flow">
+          <div class="flow-box"><div class="flow-tag">Input</div><h3>Spend</h3><p>Per account, per channel, per week.</p></div>
+          <div class="flow-box"><div class="flow-tag">→</div><h3>Ad memory</h3><p>This week carries a fraction of last week's effect.</p></div>
+          <div class="flow-box"><div class="flow-tag">→</div><h3>Saturation</h3><p>A curve that bends — the tenth impression does less.</p></div>
+          <div class="flow-box"><div class="flow-tag">→</div><h3>× account effect</h3><p>A per-account coefficient, pooled across segments.</p></div>
+          <div class="flow-box"><div class="flow-tag">→</div><h3>+ baseline</h3><p>Organic demand and seasonality.</p></div>
+          <div class="flow-box"><div class="flow-tag">Out</div><h3>Likelihood</h3><p>LogNormal for money, NegBinomial for counts.</p></div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <h2>Sampling setup</h2>
+          <div class="def"><div class="def-k">Sampler</div><div>NUTS (No-U-Turn) in PyMC</div></div>
+          <div class="def"><div class="def-k">Chains</div><div>4 independent explorations</div></div>
+          <div class="def"><div class="def-k">Draws</div><div>1,000 kept + 1,000 tuning, per chain</div></div>
+          <div class="def"><div class="def-k">Total draws</div><div>4,000 possible worlds</div></div>
+          <div class="def"><div class="def-k">Target accept</div><div>0.99 (default is 0.8)</div></div>
+          <div class="def"><div class="def-k">Seed</div><div>42 — fixed, so every run reproduces</div></div>
+          <div class="def"><div class="def-k">Runtime</div><div>20–40 min on CPU. No GPU.</div></div>
+          <div class="note">
+            <div class="note-label">Why four chains</div>
+            <p>That <strong>is</strong> the convergence check. Four independent explorations
+            start from different random points; if they all describe the same landscape, the
+            sampler found something real. A single run can't detect that failure.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Three-level pooling</h2>
+          <p class="sub">Global channel effect → segment offset → account offset.</p>
+          <p style="color:var(--text-2)">
+            With 20 accounts you can't fit each independently — you'd be fitting noise.
+            Pooling pulls a thin-data account toward its segment's behaviour, while an
+            account with plenty of data is allowed to depart from it. The model decides how
+            hard to pull, based on how much accounts actually differ.
+          </p>
+          <div class="note note-amber">
+            <div class="note-label">Why target accept is turned up</div>
+            <p>The hierarchy creates <strong>funnel geometry</strong> — a narrow neck the
+            sampler can't step through cleanly. Two fixes: a non-centered reparameterization
+            that flattens the funnel, and smaller steps. A handful of divergences at 0.8,
+            some at 0.95, clear at 0.99 — for about 1.5–2× the runtime.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Priors, and why they're not arbitrary</h2>
+        <div class="def"><div class="def-k">Channel effects</div><div>LogNormal — forces positive, since a channel can't have negative return</div></div>
+        <div class="def"><div class="def-k">Ad memory decay</div><div>Beta — it's a fraction between 0 and 1 by definition</div></div>
+        <div class="def"><div class="def-k">Pooling variance</div><div>HalfNormal</div></div>
+        <div class="def"><div class="def-k">Sanity check</div><div>Prior predictive — sample from priors alone, before touching data, and check the implied outcomes are physically sensible</div></div>
+        <div class="note">
+          <div class="note-label">Overfitting</div>
+          <p>Informative priors keep the model plausible, and pooling stops a thin account
+          inventing its own coefficient. Beyond that: fit the model on part of the year and
+          check it predicts the part it never saw.</p>
+        </div>
+      </div>
+      <p class="foot" id="foot-6"></p>
+    </section>
+
+    <!-- ================= JSON CONTRACT ================= -->
+    <section class="page" id="p-contract">
+      <div class="eyebrow">One document, every renderer</div>
+      <h1>Everything downstream reads the same JSON</h1>
+      <p class="lede">
+        The analysis produces exactly one document. Excel renders it, Power BI renders it,
+        the slide generator renders it. Nothing recomputes anything — so the workbook and the
+        deck cannot quietly disagree.
+      </p>
+
+      <div class="card">
+        <h2>The ten top-level keys</h2>
+        <div id="egress-keys"></div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <h2>Byte-identical on re-run</h2>
+          <p style="color:var(--text-2)">Same posterior in, same bytes out. A quarter from
+          now someone re-runs the analysis and diffs the file — if nothing changed, the diff
+          is empty. That's what makes a number defensible months later.</p>
+          <div class="chips">
+            <span class="chip chip-mono">seed = 42</span>
+            <span class="chip chip-mono">schema v1.0.0</span>
+            <span class="chip chip-mono">semver-gated</span>
+          </div>
+        </div>
+        <div class="card">
+          <h2>Warnings are part of the payload</h2>
+          <p class="sub">Not a log line someone might miss. A field, in the contract.</p>
+          <div id="warnings-list"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Methodology references</h2>
+        <p class="sub">Provenance travels with the numbers, so a reader can trace any figure back to a method.</p>
+        <div id="method-refs"></div>
+      </div>
+      <p class="foot" id="foot-contract"></p>
+    </section>
+
+    <!-- ================= EXCEL ================= -->
+    <section class="page" id="p-excel">
+      <div class="eyebrow">Deliverable · openpyxl + xlsxwriter</div>
+      <h1>The Excel workbook</h1>
+      <p class="lede">
+        Marketers live in Excel, so the analysis has to arrive there — not as a CSV dump, but
+        as something a director can open in a meeting. Three tabs: a report you can present
+        from, the numbers behind it, and a hidden sheet nobody should touch.
+      </p>
+
+      <div class="card">
+        <h2>Three tabs</h2>
+        <div id="wb-tabs"></div>
+      </div>
+
+      <div class="card">
+        <h2>The Results tab — ten tables</h2>
+        <p class="sub">Every column header below is the real one in the export.</p>
+        <div id="wb-tables"></div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <h2>Number formats</h2>
+          <p class="sub">Header-aware, so a share never renders as 0.33 and a multiple never as 4.83.</p>
+          <div id="wb-formats"></div>
+        </div>
+        <div class="card">
+          <h2>Presentation details</h2>
+          <div class="def"><div class="def-k">Typeface</div><div>Calibri throughout, including the Normal style</div></div>
+          <div class="def"><div class="def-k">Gridlines</div><div>Off on every sheet, hidden ones included</div></div>
+          <div class="def"><div class="def-k">Opens on</div><div>Report — never the raw numbers</div></div>
+          <div class="def"><div class="def-k">Print</div><div>Results is page-set up to print sensibly</div></div>
+          <div class="def"><div class="def-k">Column widths</div><div>Autofit against rendered width, not raw string length</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Open the real file</h2>
+        <div id="embed-excel"></div>
+      </div>
+      <p class="foot" id="foot-excel"></p>
+    </section>
+
+    <!-- ================= POWER BI ================= -->
+    <section class="page" id="p-powerbi">
+      <div class="eyebrow">Deliverable · dashboard/powerbi.py</div>
+      <h1>Power BI</h1>
+      <p class="lede">
+        Excel is what one person opens. Power BI is what a team leaves on a wall. Power BI
+        can't bind to nested JSON, and a .pbix has to be authored on Windows — so what lives
+        in code is the <em>data layer</em>: four flat, tidy tables, plus a committed report
+        template built against them.
+      </p>
+
+      <div class="card note-green" style="box-shadow:none">
+        <div class="note-label">Why the numbers can't drift</div>
+        <p style="color:var(--text-2);margin-top:4px">
+          The tables are derived with the <strong>same helpers the Excel report uses</strong>.
+          Power BI, the Excel workbook, and the notebook all read one canonical JSON through
+          one set of derivations — so there is no path by which the wall dashboard and the
+          workbook quietly disagree.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>The four tables</h2>
+        <p class="sub">Flat and tidy, because that's what Power BI binds cleanly to.</p>
+        <div id="pbi-tables"></div>
+      </div>
+
+      <div class="card">
+        <h2>Four ways to get it open</h2>
+        <p class="sub">Different people have different machines. Each entry point emits the same numbers.</p>
+        <div id="pbi-paths"></div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <h2>The committed report template</h2>
+          <p class="sub">Ten visuals on page 1, already laid out — nobody rebuilds them.</p>
+          <div id="pbi-visuals"></div>
+        </div>
+        <div class="card">
+          <h2>Provenance banner</h2>
+          <p class="sub">Every render says where its numbers came from, in colour.</p>
+          <div id="pbi-banner"></div>
+          <div class="note">
+            <div class="note-label">Outcome-agnostic</div>
+            <p>The report doesn't know which of the four outcomes it's showing — the
+            <code>meta</code> table scopes it. Point it at a stage-transitions payload and it
+            renders stage transitions, with no template change.</p>
+          </div>
+          <div class="note note-amber">
+            <div class="note-label">One honest limit</div>
+            <p>The HTML output is a look-preview only. It doesn't refresh and can't feed a
+            Power BI report — the workbook and the PBIP project are the live surfaces.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Live embed</h2>
+        <div id="embed-powerbi"></div>
+      </div>
+      <p class="foot" id="foot-pbi"></p>
+    </section>
+
+    <!-- ================= DECK ================= -->
+    <section class="page" id="p-deck">
+      <div class="eyebrow">Deliverable</div>
+      <h1>Slide deck</h1>
+      <p class="lede">The full walkthrough — problem, method, results, and what I'd do next.</p>
+      <div id="embed-deck"></div>
+      <p class="foot" id="foot-deck"></p>
+    </section>
+
+    <!-- ================= GENERATED ================= -->
+    <section class="page" id="p-generated">
+      <div class="eyebrow">Deliverable · generated, not drawn</div>
+      <h1>The generated deck</h1>
+      <p class="lede">
+        A layout script emits the poster as SVG, and the same layout engine emits a native,
+        fully-editable PowerPoint. Re-run the analysis, re-run the build, and every figure
+        updates. Nothing is hand-drawn and nothing is typed twice.
+      </p>
+      <div class="card">
+        <div class="grid3">
+          <div class="stat"><div class="stat-label">Poster builder</div><div class="stat-value">676 LOC</div><div class="stat-note">emits SVG</div></div>
+          <div class="stat"><div class="stat-label">Deck builder</div><div class="stat-value">Native .pptx</div><div class="stat-note">same layout engine, editable shapes</div></div>
+          <div class="stat"><div class="stat-label">Source of truth</div><div class="stat-value">The JSON</div><div class="stat-note">figures are copied, never retyped</div></div>
+        </div>
+      </div>
+      <div id="embed-generated"></div>
+      <p class="foot" id="foot-gen"></p>
+    </section>
+
+  </main>
 </div>
+
+<script>
+/* ------------------------------------------------------------------
+   Drop your files in here. Empty string keeps the placeholder.
+   PDFs and web embed URLs render inline; .xlsx/.pptx render as a
+   download button, because browsers can't display them inline.
+   ------------------------------------------------------------------ */
+const EMBEDS = {
+  deck:      "",   // e.g. "assets/deck.pdf"
+  generated: "assets/s41_business_ready.pptx",   // e.g. "assets/generated-deck.pdf"
+  excel:     "",   // e.g. "assets/export.xlsx"
+  powerbi:   "",   // e.g. "https://app.powerbi.com/view?r=..."
+};
+</script>
+<script src="data.js"></script>
+<script src="app.js"></script>
 </body>
 </html>

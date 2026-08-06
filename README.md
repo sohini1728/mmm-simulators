@@ -1,33 +1,48 @@
-# MMM Simulators
+# Insights Layer — B2B Marketing Mix Modeling
 
-Five interactive explainers for how a marketing mix model reaches a budget
-recommendation. Plain static HTML — no build step, no framework, no backend.
-Everything computes in the browser.
+An interactive walkthrough of how a Bayesian marketing mix model gets from a fitted
+posterior to a budget recommendation — and when it should decline to make one.
 
-| # | Page | The question it answers |
-|---|---|---|
-| 01 | `mmm_pipeline_simulator.html` | Why ROI is a difference, not a share |
-| 02 | `response_curves_simulator.html` | Where your data ends and guessing starts |
-| 03 | `outcome_types_simulator.html` | Why a count ROI can't be compared to a dollar ROI |
-| 04 | `budget_mix_simulator.html` | Where the next dollar should go |
-| 05 | `reconciliation_stability_simulator.html` | Whether the result should ship at all |
+Plain static HTML. No build step, no framework, no backend. Everything computes in
+the browser.
 
-`index.html` is a landing page linking all five.
+## Structure
+
+| File | What it is |
+|---|---|
+| `index.html` | The whole site — 21 pages in a single-page app |
+| `app.js` | Rendering, navigation, and every interactive simulator |
+| `data.js` | Scenario 41 pilot results and the funnel/stage tables |
+| `style.css` | Theme |
+| `assets/` | Generated deliverables |
+
+## Contents
+
+**How it works** — six steps, five of them interactive:
+
+1. The core idea — turn a channel off, see what breaks
+2. Trace one dollar — spend → adstock → saturation
+3. Read the curve — where your data ends and guessing starts
+4. Pick an outcome — one decision, four different answers
+5. Split the budget — equalise what the next dollar returns
+6. Decide if it ships — the three release gates
+
+**Under the hood** — how the posterior is sampled, and the single JSON contract
+every renderer reads from.
+
+**The pilot result** — a synthetic $1.55M / three-channel scenario, including one
+outcome where the system refuses to make a recommendation because the channel
+ranking did not survive perturbation.
 
 ## Run locally
 
 ```bash
 python3 -m http.server 8000
-# open http://localhost:8000
 ```
 
-Opening `index.html` directly also works.
+Then open http://localhost:8000.
 
 ## Deploy
 
-Any static host. On Vercel: import the repo, framework preset **Other**, leave
-build and output settings empty.
-
-## Note
-
-All parameters are illustrative and no real campaign data is included.
+Static — point any host at the repo root with `index.html` as the entry point.
+No build command, no output directory.
